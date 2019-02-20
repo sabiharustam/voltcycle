@@ -1,8 +1,6 @@
  This is to put in use cases for cyclic voltammetry project.
 
-# 1.Input your own cyclic voltammetry (CV) data, select, and visualize user specified
-datasets 
-## Components 
+# 1.Input your own cyclic voltammetry (CV) data, select, and visualize user specified datasets 
 	* GUI asks users to load CV data
 		* User selects data type from a dropdown menu (text, excel, other txt files),
 		* User selects reference electrode from a dropdown menu (dictionary)
@@ -18,7 +16,6 @@ datasets
 	* plot CV data for selected cycles/files
 
 # 2. Assessing reversibility in your CV data (with freedom for user to select what peaks to look for/override automation)
-## Components
 	* GUI to plot data from a particular dataset(for demo)
 	* Smoothen plots
 	* Find Peaks
