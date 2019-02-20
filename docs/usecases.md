@@ -1,49 +1,38 @@
  This is to put in use cases for cyclic voltammetry project.
 
-1.	Input your own CV data, select and visualize representative 
-cycles to get nice plots. Components:
-•	GUI asking to load users CV data, data type from a dropdown menu 
-(text, excel, other txt files), reference from a dropdown menu 
-(dictionary)
-•	read file into dataframe using pd.read_csv, pd.read_excel
-•	Check for empty cells and replace with average of previous and 
-next value + send a warning
-•	Manipulation in shifting the data (to measure with reference to 
-the reference)
-o	Input and offset (convert to standard hydrogen electrode)
-•	Return to user number of cycles found, ask which representative 
-cycles to display (if it detects multiple cycles, dropdown to ask user 
-how many to run).
-•	plot cv data for selected cycles, show user in a nice formatted 
-plot.
-•	Smoothen plots
+1.Input your own cyclic voltammetry (CV) data, select, and visualize user specified
+datasets 
+*Components*:
+	* GUI asks users to load CV data
+		* User selects data type from a dropdown menu (text, excel, other txt files),
+		* User selects reference electrode from a dropdown menu (dictionary)
+	* Read file into dataframe using pd.read_csv, pd.read_excel
+	* Check for empty cells and replace with average of previous and next value + send a warning
+	* User can choose to offset data with different reference electrode, input new reference
+	* Data is adjusted to reflect new reference electrode
+	* Data files can be for one cycle for one system/compound but they could also be multiple cycles for one
+	 system. The program either needs to detect this and display a number of cycles found, or the user needs
+	 specify this for the program. 
+	* Data files should be displayed in some type of list
+	* User should be able to select data to plot and/or run through data analysis
+	* plot CV data for selected cycles/files
 
-2.	Assessing reversibility in your cv data (freedom for user to 
-select what peaks to look for).
-Components:
-•	GUI to plot data from a particular dataset (demo)
-•	Interface for selecting cycle number to plot
-•	Link from user inputted cycle number to appropriate plot in the 
-dataset.
-o	Multiple ways – input multiple datasets and chose which ones to 
-plot (from that, which cycle from which particular set)
-•	Find peaks
-o	Function based on the number of peaks found, returns number of 
-peaks
-o	If more than 2 peaks, says you need to continue analysis (to 
-compare peaks)
-o	Find if any are pairs (therefore reversible), returns numbers of 
-pairs
-•	Define baselines
-o	From the baseline, measure heights of the peaks (Ipa, Ipc)
-o	Tangent line slope of curve (minimum prior to the peak)
-o	Measure difference between peak potentials (Epa, Epc – position 
-from x axis)
-o	Return the halfway point (redox potential)
-o	Return ratio of Ipa to Ipc (the close it is to 1, the better it 
-will rank)
-o	Rank ratios
+2.Assessing reversibility in your CV data (with freedom for user to select what peaks to look for/override automation)
+*Components*:
+	* GUI to plot data from a particular dataset(for demo)
+	* Smoothen plots
+	* Find Peaks
+		* If 2 or more peaks, continue. A pair of peaks indicates a reversible reaction (needed for battery)
+		* If 3 or more, ask for user to select peaks for analysis
+	* Define baselines
+		* This function may be based on tangents of curve near the recognized peaks
+	* From the baseline, measure heights of peaks (Ipa, Ipc, current)
+	* Measure difference between peak potentials (Epa, Epc, voltage)
+	* Return the halfway point (E1/2, redox potential)
+	* Return ratio of Ipa to Ipc (the closer it is to 1, the higher the material will rank)
+	* Rank ratios, and/or produce a score we define based on these parameters and rank by this score
 
-3.	Output table consisting of ID and pass/fail (based on 
-reversibility) and generates cv plots of reversible data.
-
+3. Return results of analysis/visualize
+	* Output a table with ID, reversibility parameters, and some type of pass/fail score
+	* Maybe data table is color-coded with red, yellow, green to see higher scores vs failing easily 
+	* User should have option to see plots at this point too. Maybe click on ID in table to see plot
