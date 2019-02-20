@@ -1,8 +1,8 @@
  This is to put in use cases for cyclic voltammetry project.
 
-1.Input your own cyclic voltammetry (CV) data, select, and visualize user specified
+# 1.Input your own cyclic voltammetry (CV) data, select, and visualize user specified
 datasets 
-*Components*:
+## Components 
 	* GUI asks users to load CV data
 		* User selects data type from a dropdown menu (text, excel, other txt files),
 		* User selects reference electrode from a dropdown menu (dictionary)
@@ -17,8 +17,8 @@ datasets
 	* User should be able to select data to plot and/or run through data analysis
 	* plot CV data for selected cycles/files
 
-2.Assessing reversibility in your CV data (with freedom for user to select what peaks to look for/override automation)
-*Components*:
+# 2. Assessing reversibility in your CV data (with freedom for user to select what peaks to look for/override automation)
+## Components
 	* GUI to plot data from a particular dataset(for demo)
 	* Smoothen plots
 	* Find Peaks
@@ -32,7 +32,7 @@ datasets
 	* Return ratio of Ipa to Ipc (the closer it is to 1, the higher the material will rank)
 	* Rank ratios, and/or produce a score we define based on these parameters and rank by this score
 
-3. Return results of analysis/visualize
+# 3. Return results of analysis/visualize
 	* Output a table with ID, reversibility parameters, and some type of pass/fail score
 	* Maybe data table is color-coded with red, yellow, green to see higher scores vs failing easily 
 	* User should have option to see plots at this point too. Maybe click on ID in table to see plot
