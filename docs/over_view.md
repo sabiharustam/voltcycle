@@ -10,3 +10,9 @@
 	# For this part we need good peak finding tools.
 	d. Peak current: The peak current is the (baseline corrected) current at the maximum (or minimum) of a feature in a CV. If the baseline current before the wave is 2 µA, then 2 µA must be subtracted from ip of wave under study. Non-zero baseline currents are to be expected, as it results from the act of changing the electrode potential, but it may also be due to the presence of another wave that occurs at an earlier time in the scan.The change in ip with scan rate can determine whether the electron transfer occurs between the electrode and a species in solution, or a species adsorbed on the electrode surface. The ip can also be used to measure the diffusion coefficient of an analyte with a simple equation that is covered in another section.
 	e. Diffusion limited current: The diffusion limited current can be used to find the diffusion coefficient of the analyte. This might be beyond the scoop of our project.
+
+# All the URLS:
+* http://www.bonhamlab.com/tools/code/peak-finder-sequential/
+* https://github.com/MonsieurV/py-findpeaks
+* https://github.com/aryeelab/hichipper/blob/master/hichipper/cli.py
+	# might be usefull to look at the pointy clicky ones.
