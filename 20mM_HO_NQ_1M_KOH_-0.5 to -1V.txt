@@ -1,5 +1,5 @@
 EXPLAIN
-TAG	CV
+TAG	CV1
 TITLE	LABEL	Cyclic Voltammetry	Test &Identifier
 DATE	LABEL	9/25/2018	Date
 TIME	LABEL	11:48:22	Time
