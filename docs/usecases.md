@@ -19,7 +19,7 @@
 	* Find all peaks in the CV curve.
 	* Assess the chemical reversibiltiy of the system.
 		* If only one peak is found, the system is deemed as chemically "irreversible', and analysis does not continue.
-		* If two corresponding oxidation/reduction (positive, negative) peaks are found, the system is deemed as chemically               "reversible" and analysis continues.
+		* If two corresponding oxidation/reduction (positive, negative) peaks are found, the system is deemed as chemically        "reversible" and analysis continues.
 		* If three or more peaks are found, advises the user that more external analysis is required.
 	* Assess the electrochemical reversibility of the system.
 		* Find the distance between the two peak potentials (delta Ep).
@@ -48,6 +48,6 @@
 		* ipA/ipC
 		* performance ranking. 
 	* Possible interactive feature to see the results of the analysis directly on the CV plot.
-	* Overall, visualization should be well organized and visually pleasing, so that the results could be used for possible           ML/data science techniques correlating the materials physical properties (structure, etc.) to their performance                   characteristics. 
+	* Overall, visualization should be well organized and visually pleasing, so that the results could be used for possible       ML/data science techniques correlating the materials physical properties (structure, etc.) to their performance                   characteristics. 
     
    
