@@ -1,38 +1,53 @@
- #This is to put in use cases for Cyclic voltametry project.
+## 1. Upload, read, and plot cyclic voltammetry data.
 
-## 1. Input your own cyclic voltammetry (CV) data, select, and visualize user specified datasets 
+	* Implement a GUI (using Dash) that asks users to upload CV data.
+		* User uploads data in the form of a .txt file, or some other common variation (e.g. .DTA).
+		* Should have the ability to upload multiple files/datasets.
+		* Data files should be displayed in some type of list.   
+	* Read file(s) into a dataframe.
+		* Must be able to extract only the necessary data columns from the .txt files.
+		* Needs to be able to distinguish between multiple cycles in the same file.
+		* Check for empty cells and replace with average of previous and next value + send a warning.
+	* User should be able to select data/cycles to plot and/or run through data analysis.
+		* Multiple plots should be able to be shown in an organized and visually pleasing manor.
+		* Options within the GUI for plot colors, markers, ticks, etc.      
+	* User can choose to offset the potential scale based on the reference electrode used.
+		* This is either done through a drop down menu of reference electrodes or manual setting.
 
-	* GUI asks users to load CV data
-		* User selects data type from a dropdown menu (text, excel, other txt files),
-		* User selects reference electrode from a dropdown menu (dictionary)
-	* Read file into dataframe using pd.read_csv, pd.read_excel
-	* Check for empty cells and replace with average of previous and next value + send a warning
-	* User can choose to offset data with different reference electrode, input new reference
-	* Data is adjusted to reflect new reference electrode
-	* Data files can be for one cycle for one system/compound but they could also be multiple cycles for one
-	 system. The program either needs to detect this and display a number of cycles found, or the user needs
-	 specify this for the program. 
-	* Data files should be displayed in some type of list
-	* User should be able to select data to plot and/or run through data analysis
-	* plot CV data for selected cycles/files
+## 2. Analysis of CV data 
 
-## 2. Assessing reversibility in your CV data (with freedom for user to select what peaks to look for/override automation)
+	* Find all peaks in the CV curve.
+	* Assess the chemical reversibiltiy of the system.
+		* If only one peak is found, the system is deemed as chemically "irreversible', and analysis does not continue.
+		* If two corresponding oxidation/reduction (positive, negative) peaks are found, the system is deemed as chemically               "reversible" and analysis continues.
+		* If three or more peaks are found, advises the user that more external analysis is required.
+	* Assess the electrochemical reversibility of the system.
+		* Find the distance between the two peak potentials (delta Ep).
+		* Use the delta Ep as a performance ranking metric (shorter delta Ep = faster electron transfer).
+		* Based on theoretical peak distance, 57mV/# of electrons), suggest how many electron transfers are involved.        
+		* If the delta Ep is greater than 300mV, system is deemed as electrochemically "irreversible" and analysis stops.      
+	* Calculate the redox potential of the system.
+		* Redox potential is the half way point between the peak potentials.
+		* If the redox potential is negative, classify the material as an "Anolyte".
+		* If the redox Potential is positive, classify the material as a "Catholyte".
+	* Calculate the ratio of the anodic(oxidation) and cathodic(reduction) peak current heights (ipA/ipC).        
+		* Need to establish a baseline from which to calculate the peak heights.
+		* Use the ipA/ipC as a performance metric for chemical reversiblity (ipA/ipC = 1 is ideal scenario). 
 
-	* GUI to plot data from a particular dataset(for demo)
-	* Smoothen plots
-	* Find Peaks
-		* If 2 or more peaks, continue. A pair of peaks indicates a reversible reaction (needed for battery)
-		* If 3 or more, ask for user to select peaks for analysis
-	* Define baselines
-		* This function may be based on tangents of curve near the recognized peaks
-	* From the baseline, measure heights of peaks (Ipa, Ipc, current)
-	* Measure difference between peak potentials (Epa, Epc, voltage)
-	* Return the halfway point (E1/2, redox potential)
-	* Return ratio of Ipa to Ipc (the closer it is to 1, the higher the material will rank)
-	* Rank ratios, and/or produce a score we define based on these parameters and rank by this score
+## 3. Visualization of results
 
-## 3. Return results of analysis/visualize
-
-	* Output a table with ID, reversibility parameters, and some type of pass/fail score
-	* Maybe data table is color-coded with red, yellow, green to see higher scores vs failing easily 
-	* User should have option to see plots at this point too. Maybe click on ID in table to see plot
+	* Implement a GUI (using Dash) that displays the initial plots from part 1 along with the results of the analysis in a table. 
+		* Must be able to call the results and place directly into the table, which may be challenging.
+	* Table will include columns for:
+		* filename 
+		* CV plot 
+		* Chemical reversibility (yes/no) 
+		* delta Ep (return "electrochemically irreversible" if delta Ep >300mV)
+		* redox potential
+		* anolyte/catholyte classification
+		* ipA/ipC
+		* performance ranking. 
+	* Possible interactive feature to see the results of the analysis directly on the CV plot.
+	* Overall, visualization should be well organized and visually pleasing, so that the results could be used for possible           ML/data science techniques correlating the materials physical properties (structure, etc.) to their performance                   characteristics. 
+    
+   
