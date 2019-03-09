@@ -67,3 +67,24 @@ def half_wave_potential(data, index, potential_column_name):
          floating point number."""
     half_wave_potential = (del_potential(data, index, potential_column_name))/2
     return half_wave_potential
+
+
+def peak_currents(data, index, current_column_name):
+    """Outputs currents of given peaks in cyclic voltammetry data.
+
+       Parameters
+       ----------
+       data : Must be in the form of a pandas DataFrame
+
+       index : integer(s) in the form of a list or numpy array
+
+       current_column_name : the name of the column of the DataFrame
+         which contains potentials from cyclic voltammogram. If a string,
+         must be input with single or double quotation marks
+
+       Returns
+       -------
+       Result : numpy array of currents at peaks"""
+    series = data.iloc[index][current_column_name]
+    currents_array = (series).values
+    return currents_array
