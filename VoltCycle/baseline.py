@@ -1,6 +1,7 @@
 ## FileName : baseline.py
 ## Calculate peak current from cyclic voltametry data
 ## Detect and remove value of capacitive current (background) from cyclic voltametry data 
+#Still need some edits.
 
 import pandas as pd
 import numpy as np
