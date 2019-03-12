@@ -96,8 +96,8 @@ def data_frame(dict_cycle, n):
     data  = pd.DataFrame(zippedList, columns = ['Potential' , 'Current'])
     return data
     
- 
-def plot(dict, n):
+
+def plot_fig(dict_cycle, n):
     """For basic plotting of the cycle data
   
     Parameters
@@ -113,7 +113,7 @@ def plot(dict, n):
         df = data_frame(dict_cycle, i+1)
         plt.plot(df.Potential, df.Current, label = "Cycle{}".format(i+1))
         
-    
+    print(df.head())
     plt.xlabel('Voltage')
     plt.ylabel('Current')
     plt.legend()
@@ -121,6 +121,6 @@ def plot(dict, n):
     print('executed')
 
 
-dict_cycle, n_cycle  = read_file('test.txt')
-rcParams.update({'figure.autolayout': True})
-plot(dict_cycle, n_cycle)
+#dict_cycle, n_cycle  = read_file('test.txt')
+#rcParams.update({'figure.autolayout': True})
+#plot(dict_cycle, n_cycle)

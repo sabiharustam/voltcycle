@@ -103,7 +103,9 @@ def data_frame(dict_cycle, n):
     zippedList = list(zip(list1[1], list2[1]))
     data  = pd.DataFrame(zippedList, columns = ['Potential' , 'Current'])
     return data
-def plot(dict, n):
+
+
+def plot_fig(dict_cycle, n):
     """For basic plotting of the cycle data
   
     Parameters
@@ -119,17 +121,16 @@ def plot(dict, n):
         df = data_frame(dict_cycle, i+1)
         plt.plot(df.Potential, df.Current, label = "Cycle{}".format(i+1))
         
-    
+    #print(df.head())
     plt.xlabel('Voltage')
     plt.ylabel('Current')
     plt.legend()
     plt.savefig('cycle.png')
     print('executed')
 
-
-dict_cycle, n_cycle  = read_file('test.txt')
-rcParams.update({'figure.autolayout': True})
-plot(dict_cycle, n_cycle)
+#dict_cycle, n_cycle  = read_file('test.txt')
+#rcParams.update({'figure.autolayout': True})
+#plot(dict_cycle, n_cycle)
 
 
 #split forward and backward sweping data, to make it easier for processing.
@@ -158,13 +159,13 @@ def critical_idx(x, y): ## Finds index where data set is no longer linear
         a = 0 
         for j in range(0,5):
             a = a + k[i+j]
-        ave5.append(round(a/5, 9)) # keeping 9 desimal points for more accuracy
+        ave5.append(round(a/5, 5)) # keeping 9 desimal points for more accuracy
     ave5 = np.asarray(ave5)
     for i in range(len(x)-15): 
         b = 0 
         for j in range(0,15):
             b = b + k[i+j]
-        ave15.append(round(b/15, 9))
+        ave15.append(round(b/15, 5))
     ave15 = np.asarray(ave15)
     ## Find intercepts of different moving average curves
     idx = np.argwhere(np.diff(np.sign(ave15 - ave5[:len(ave15)])!= 0)).reshape(-1) #reshape into one row.
