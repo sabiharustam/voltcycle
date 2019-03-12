@@ -159,13 +159,13 @@ def critical_idx(x, y): ## Finds index where data set is no longer linear
         a = 0 
         for j in range(0,5):
             a = a + k[i+j]
-        ave5.append(round(a/5, 9)) # keeping 9 desimal points for more accuracy
+        ave5.append(round(a/5, 5)) # keeping 9 desimal points for more accuracy
     ave5 = np.asarray(ave5)
     for i in range(len(x)-15): 
         b = 0 
         for j in range(0,15):
             b = b + k[i+j]
-        ave15.append(round(b/15, 9))
+        ave15.append(round(b/15, 5))
     ave15 = np.asarray(ave15)
     ## Find intercepts of different moving average curves
     idx = np.argwhere(np.diff(np.sign(ave15 - ave5[:len(ave15)])!= 0)).reshape(-1) #reshape into one row.
