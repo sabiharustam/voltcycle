@@ -6,15 +6,28 @@ import calculations
 
 
 def test_peak_values():
-    """This function tests get_peak_potentials() function."""
-    potentials = [0.167, 0.251, 0.500]
-    currents = [-46.370, 33.153, 7.040]
-    index = [0, 1]
-    assert type(calculations.peak_values(potentials, index)) == np.ndarray, "output is not an array"
-    assert calculations.peak_values(potentials, index)[0] == 0.167, "array value incorrect for data"
-    assert calculations.peak_values(potentials, index)[1] == 0.251, "array value incorrect for data"
-    assert calculations.peak_values(currents, index)[0] == -46.370, "array value incorrect for data"
-    assert calculations.peak_values(currents, index)[1] == 33.153, "array value incorrect for data"
+    """This function tests peak_values() function."""
+    potentials = [0.500, 0.499, 0.498, 0.497]
+    currents = [7.040, 6.998, 8.256, 8.286]
+    potentials_d = pd.DataFrame(potentials)
+    currents_d = pd.DataFrame(currents)
+
+    def peak_detection(Dataframe_y):
+        list = [0, 1]
+        return list
+
+    def split(vector):
+        split = int(len(vector)/2)
+        end = int(len(vector))
+        vector1 = np.array(vector)[0:split]
+        vector2 = np.array(vector)[split:end]
+        return vector1, vector2
+
+    assert type(calculations.peak_values(potentials_d, currents_d)) == np.ndarray, "output is not an array"
+    assert calculations.peak_values(potentials_d, currents_d)[0] == 0.498, "array value incorrect for data"
+    assert calculations.peak_values(potentials_d, currents_d)[2] == 0.499, "array value incorrect for data"
+    assert calculations.peak_values(potentials_d, currents_d)[1] == 8.256, "array value incorrect for data"
+    assert calculations.peak_values(potentials_d, currents_d)[3] == 6.998, "array value incorrect for data"
     return
 
 

@@ -2,24 +2,34 @@ import numpy as np
 import pandas as pd
 
 
-def peak_values(data, index):
-    """Outputs potentials of given peaks in cyclic voltammetry data.
+def peak_values(DataFrame_x, DataFrame_y):
+    """Outputs x (potentials) and y (currents) values from data indices
+        given by peak_detection function.
 
        Parameters
        ----------
-       data : should be in the form of a list or numpy array
+       DataFrame_x : should be in the form of a pandas DataFrame column.
+         For example, df['currents'] as the column of y data.
 
-       index : Peak indexes must be integer(s) in the form of a list
-         or numpy array
+       DataFrame_y : should be in the form of a pandas DataFrame column.
+         For example, df['currents'] as the column of y data.
 
        Returns
        -------
-       Result : numpy array of potentials at peaks."""
-    values_list = []
-    for i in index:
-        values_list.append(data[i])
-    values_array = np.array(values_list)
-    return values_array
+       Result : numpy array of coordinates at peaks in the following order:
+         potential of peak on top curve, current of peak on top curve,
+         potential of peak on bottom curve, current of peak on bottom curve"""
+    index = peak_detection(DataFrame_y)
+    potential1, potential2 = split(DataFrame_x)
+    current1, current2 = split(DataFrame_y)
+    Peak_values = []
+    Peak_values.append(potential2[(index[0])])  # TOPX (bottom part of curve is
+    # the first part of DataFrame)
+    Peak_values.append(current2[(index[0])])  # TOPY
+    Peak_values.append(potential1[(index[1])])  # BOTTOMX
+    Peak_values.append(current1[(index[1])])  # BOTTOMY
+    Peak_array = np.array(Peak_values)
+    return Peak_array
 
 
 def del_potential(data1, data2, index1, index2):
