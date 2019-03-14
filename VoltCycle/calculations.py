@@ -123,8 +123,7 @@ def peak_ratio(DataFrame_x, DataFrame_y):
 
        Returns
        -------
-       Result : returns a floating point number, the peak ratio
-       """
+       Result : returns a floating point number, the peak ratio."""
     ratio = (peak_heights(DataFrame_x, DataFrame_y)[0] /
              peak_heights(DataFrame_x, DataFrame_y)[1])
     return ratio
