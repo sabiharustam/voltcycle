@@ -201,24 +201,64 @@ def linear_background(x, y):
     y_base = y_fitted_line(m, b, x)
     return y_base
 
-def peak_detection(data_y):
-    """ peak_detection(dataframe['y column'])
-    This function returns a list of the indecies of the y values of the peaks detected in the dataset.
-    The function takes an input of the column containing the y variables in the dataframe.
-    This column is then split into two arrays, one of the positive and one of the negative values.
-    This is because cyclic voltammetry delivers negative peaks however the peakutils function work better with positive peaks.
-    The absolute values of each of these vectors are then imported into the peakutils.indexes
-    function to determine the significant peak(s) for each array. The value(s) are then saved as a list."""
- 
+
+def peak_detection_fxn(data_y):
+    """The function takes an input of the column containing the y variables in the dataframe,
+    associated with the current. The function calls the split function, which splits the
+    column into two arrays, one of the positive and one of the negative values.
+    This is because cyclic voltammetry delivers negative peaks, but the peakutils function works
+    better with positive peaks. The function also runs on the middle 80% of data to eliminate
+    unnecessary noise and messy values associated with pseudo-peaks.The vectors are then imported
+    into the peakutils.indexes function to determine the significant peak for each array.
+    The values are stored in a list, with the first index corresponding to the top peak and the
+    second corresponding to the bottom peak.
+    Parameters
+    ______________
+    y column: must be a column from a pandas dataframe
+
+    Returns
+    _____________
+    A list with the index of the peaks from the top curve and bottom curve.
+    """
+
+    # initialize storage list
     index_list = []
 
-    y1, y2 = split(data_y)
+    # split data into above and below the baseline
+    col_y1, col_y2 = main.split(data_y)
 
-    peak_top = peakutils.indexes(abs(y1), thres=0.5, min_dist=0.001)
-    peak_bottom = peakutils.indexes(abs(y2), thres=0.5, min_dist=0.001)
-    index_list.append([peak_top[0], peak_bottom[0]])
+    # detemine length of data and what 10% of the data is
+    len_y = len(col_y1)
+    ten_percent = int(np.around(0.1*len_y))
 
+    # adjust both input columns to be the middle 80% of data
+    # (take of the first and last 10% of data)
+    # this avoid detecting peaks from electrolysis
+    # (from water splitting and not the molecule itself,
+    # which can form random "peaks")
+    mod_col_y2 = col_y2[ten_percent:len_y-ten_percent]
+    mod_col_y1 = col_y1[ten_percent:len_y-ten_percent]
+
+    # run peakutils package to detect the peaks for both top and bottom
+    peak_top = peakutils.indexes(mod_col_y2, thres=0.99, min_dist=20)
+    peak_bottom = peakutils.indexes(abs(mod_col_y1), thres=0.99, min_dist=20)
+
+    # detemine length of both halves of data
+    len_top = len(peak_top)
+    len_bot = len(peak_bottom)
+
+    # append the values to the storage list
+    # manipulate values by adding the ten_percent value back
+    # (as the indecies have moved)
+    # to detect the actual peaks and not the modified values
+    index_list.append(peak_top[int(len_top/2)]+ten_percent)
+    index_list.append(peak_bottom[int(len_bot/2)]+ten_percent)
+
+    # return storage list
+    # first value is the top, second value is the bottom
     return index_list
+
+
 def peak_potentials(data, index, potential_column_name):
     """Outputs potentials of given peaks in cyclic voltammetry data.
 
