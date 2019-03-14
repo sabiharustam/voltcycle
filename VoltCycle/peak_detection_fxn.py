@@ -33,7 +33,6 @@ def peak_detection_fxn(data_y):
 
     # split data into above and below the baseline
     col_y1, col_y2 = main.split(data_y)
-    print(col_y1)
 
     # detemine length of data and what 10% of the data is
     len_y = len(col_y1)
