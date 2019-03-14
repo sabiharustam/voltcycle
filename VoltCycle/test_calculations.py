@@ -5,23 +5,24 @@ import pandas as pd
 import calculations
 
 
+def peak_detection(Dataframe_y):
+    list = [0, 1]
+    return list
+
+def split(vector):
+    split = int(len(vector)/2)
+    end = int(len(vector))
+    vector1 = np.array(vector)[0:split]
+    vector2 = np.array(vector)[split:end]
+    return vector1, vector2
+
+
 def test_peak_values():
     """This function tests peak_values() function."""
     potentials = [0.500, 0.499, 0.498, 0.497]
     currents = [7.040, 6.998, 8.256, 8.286]
     potentials_d = pd.DataFrame(potentials)
     currents_d = pd.DataFrame(currents)
-
-    def peak_detection(Dataframe_y):
-        list = [0, 1]
-        return list
-
-    def split(vector):
-        split = int(len(vector)/2)
-        end = int(len(vector))
-        vector1 = np.array(vector)[0:split]
-        vector2 = np.array(vector)[split:end]
-        return vector1, vector2
 
     assert type(calculations.peak_values(potentials_d, currents_d)) == np.ndarray, "output is not an array"
     assert calculations.peak_values(potentials_d, currents_d)[0] == 0.498, "array value incorrect for data"
