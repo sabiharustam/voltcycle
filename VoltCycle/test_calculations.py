@@ -9,12 +9,19 @@ def peak_detection(Dataframe_y):
     list = [0, 1]
     return list
 
+
 def split(vector):
     split = int(len(vector)/2)
     end = int(len(vector))
     vector1 = np.array(vector)[0:split]
     vector2 = np.array(vector)[split:end]
     return vector1, vector2
+
+
+def linear_background(x, y):
+    fake_line_list = [1, 2, 3, 4]
+    fake_line_array = np.array(fake_line_list)
+    return fake_line_array
 
 
 def test_peak_values():
@@ -33,22 +40,54 @@ def test_peak_values():
 
 
 def test_del_potential():
-    """This function tests del_potential() function."""
-    potentials = [0.167, 0.251, 0.500, 0.497]
-    assert type(calculations.del_potential(potentials, potentials, [1], [0])) == np.ndarray, "output data type not an array."
-    np.testing.assert_almost_equal(calculations.del_potential(potentials, potentials, [1], [0]), (0.251-0.167), decimal=3), "output values incorrect."
-    np.testing.assert_almost_equal(calculations.del_potential(potentials, potentials, [2, 3], [0, 1])[0], (0.500-0.167), decimal=3), "output values incorrect."
-    np.testing.assert_almost_equal(calculations.del_potential(potentials, potentials, [2, 3], [0, 1])[1], (0.497-0.251), decimal=3), "output values incorrect."
-    assert (del_potential(potentials, potentials, [2, 3], [0, 1])).shape == (2,), "output array has incorrect shape."
+    """This function tests the del_potential function."""
+    potentials = [0.500, 0.498, 0.499, 0.497]
+    currents = [7.040, 6.998, 8.256, 8.286]
+    potentials_d = pd.DataFrame(potentials)
+    currents_d = pd.DataFrame(currents)
+
+    assert type(calculations.del_potential(potentials_d, currents_d)) == np.ndarray, "output is not an array"
+    assert calculations.del_potential(potentials_d, currents_d).shape == (1,), "output shape incorrect"
+    assert calculations.del_potential(potentials_d, currents_d).size == 1, "array size incorrect"
+    np.testing.assert_almost_equal(calculations.del_potential(potentials_d, currents_d), 0.001, decimal=3), "value incorrect for data"
     return
 
 
 def test_half_wave_potential():
-    """This function tests half_potentials() function."""
-    potentials = [0.167, 0.251, 0.500, 0.497]
-    assert type(calculations.half_wave_potential(potentials, potentials, [0], [1])) == np.ndarray, "output data type not an array"
-    np.testing.assert_almost_equal(calculations.half_wave_potential(potentials, potentials, [1], [0]), ((0.251-0.167)/2), decimal=3), "output array values incorrect."
-    np.testing.assert_almost_equal(calculations.half_wave_potential(potentials, potentials, [2, 3], [0, 1])[0], ((0.500-0.167)/2), decimal=3), "output array values incorrect"
-    np.testing.assert_almost_equal(calculations.half_wave_potential(potentials, potentials, [2, 3], [0, 1])[1], ((0.497-0.252)/2), decimal=3), "output array values incorrect."
-    assert calculations.half_wave_potential(potentials, potentials, [2, 3], [0, 1]).shape == (2,)
+    """This function tests half_wave_potential() function."""
+    potentials = [0.500, 0.498, 0.499, 0.497]
+    currents = [7.040, 6.998, 8.256, 8.286]
+    potentials_d = pd.DataFrame(potentials)
+    currents_d = pd.DataFrame(currents)
+
+    assert type(calculations.half_wave_potential(potentials_d, currents_d)) == np.ndarray, "output is not an array"
+    assert calculations.half_wave_potential(potentials_d, currents_d).size == 1, "out not correct size"
+    np.testing.assert_almost_equal(calculations.half_wave_potential(potentials_d, currents_d), 0.0005, decimal=4), "value incorrect for data"
+    return
+
+
+def test_peak_heights():
+    """This function tests peak_heights() function."""
+    potentials = [0.500, 0.498, 0.499, 0.497]
+    currents = [7.040, 6.998, 8.256, 8.286]
+    potentials_d = pd.DataFrame(potentials)
+    currents_d = pd.DataFrame(currents)
+
+    assert type(calculations.peak_heights(potentials_d, currents_d)) == list, "output is not a list"
+    assert len(calculations.peak_heights(potentials_d, currents_d)) == 2, "output list is not the correct length"
+    np.testing.assert_almost_equal(calculations.peak_heights(potentials_d, currents_d)[0], 7.256, decimal=3), "max peak height incorrect for data"
+    np.testing.assert_almost_equal(calculations.peak_heights(potentials_d, currents_d)[1], 4.998, decimal=3), "min peak height incorrect for data"
+    return
+
+
+def test_peak_ratio():
+    """This function tests peak_ratio() function."""
+    potentials = [0.500, 0.498, 0.499, 0.497]
+    currents = [7.040, 6.998, 8.256, 8.286]
+    potentials_d = pd.DataFrame(potentials)
+    currents_d = pd.DataFrame(currents)
+
+    assert type(calculations.peak_ratio(potentials_d, currents_d)) == np.ndarray, "output is not an array"
+    assert len(calculations.peak_ratio(potentials_d, currents_d)) == 1, "output list is not the correct length"
+    np.testing.assert_almost_equal(calculations.peak_ratio(potentials_d, currents_d), 1.451, decimal=3), "max peak height incorrect for data"
     return
