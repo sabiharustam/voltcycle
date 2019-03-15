@@ -51,7 +51,7 @@ def del_potential(DataFrame_x, DataFrame_y):
 
         Returns
         -------
-        Results: difference in peak potentials in the form of a numpy array."""
+        Results: difference in peak potentials."""
     del_potentials = (peak_values(DataFrame_x, DataFrame_y)[0] -
                       peak_values(DataFrame_x, DataFrame_y)[2])
     return del_potentials
@@ -73,8 +73,7 @@ def half_wave_potential(DataFrame_x, DataFrame_y):
 
        Returns
        -------
-       Results : the half wave potential in the form of a
-         floating point number."""
+       Results : the half wave potential."""
     half_wave_potential = (del_potential(DataFrame_x, DataFrame_y))/2
     return half_wave_potential
 
@@ -123,7 +122,7 @@ def peak_ratio(DataFrame_x, DataFrame_y):
 
        Returns
        -------
-       Result : returns a floating point number, the peak ratio."""
+       Result : returns a the peak ratio."""
     ratio = (peak_heights(DataFrame_x, DataFrame_y)[0] /
              peak_heights(DataFrame_x, DataFrame_y)[1])
     return ratio
