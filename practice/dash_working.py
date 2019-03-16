@@ -3,10 +3,10 @@ import dash
 import dash_html_components as html
 from dash.dependencies import Input, Output
 import base64
-from os import listdir,system
 import dash_table_experiments as dt
 import dash_core_components as dcc
 from os.path import isfile, join
+from os import listdir,system
 import shutil
 import time
 import main
