@@ -13,7 +13,7 @@ colors = {
 }
 
 image_filename = 'logo.png' # replace with your own image
-encoded_image = base64.b64encode(open(logo, 'rb').read())
+encoded_image = base64.b64encode(open(image_filename, 'rb').read()).decode('ascii')
 
 app.layout = html.Div(style={'backgroundColor': colors['background']}, children=[
     html.H1(
