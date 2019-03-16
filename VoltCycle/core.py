@@ -11,7 +11,6 @@ import copy
 from matplotlib import rcParams
 
 
-
 def read_cycle(data):
     """This function reads a segment of datafile (corresponding a cycle)
     and generates a dataframe with columns 'Potential' and 'Current'
@@ -128,10 +127,6 @@ def plot_fig(dict_cycle, n):
     plt.savefig('cycle.png')
     print('executed')
 
-#dict_cycle, n_cycle  = read_file('test.txt')
-#rcParams.update({'figure.autolayout': True})
-#plot(dict_cycle, n_cycle)
-
 
 #split forward and backward sweping data, to make it easier for processing.
 def split(vector):
@@ -144,63 +139,77 @@ def split(vector):
     vector2 = np.array(vector)[split:end]
     return vector1, vector2
 
+
 def critical_idx(x, y): ## Finds index where data set is no longer linear 
     """
     This function takes x and y values callculate the derrivative of x and y, and calculate moving average of 5 and 15 points.
     Finds intercepts of different moving average curves and return the indexs of the first intercepts.
     """
     k = np.diff(y)/(np.diff(x)) #calculated slops of x and y
-
     ## Calculate moving average for 5 and 15 points.
     ## This two arbitrary number can be tuned to get better fitting.
     ave5 = []
     ave15 = []
-    for i in range(len(x)-5):  # The reason to minus 5 is to prevent j from running out of index.
+    for i in range(len(k)-10):  # The reason to minus 5 is to prevent j from running out of index.
         a = 0 
-        for j in range(0,5):
+        for j in range(0,10):
             a = a + k[i+j]
-        ave5.append(round(a/5, 5)) # keeping 9 desimal points for more accuracy
-    ave5 = np.asarray(ave5)
-    for i in range(len(x)-15): 
+        ave5.append(round(a/10, 5)) # keeping 9 desimal points for more accuracy
+    
+    for i in range(len(k)-15): 
         b = 0 
         for j in range(0,15):
             b = b + k[i+j]
         ave15.append(round(b/15, 5))
-    ave15 = np.asarray(ave15)
+    ave5i = np.asarray(ave5)
+    #print(ave10i)
+    ave15i = np.asarray(ave15)
+    #print(ave15i)
     ## Find intercepts of different moving average curves
-    idx = np.argwhere(np.diff(np.sign(ave15 - ave5[:len(ave15)])!= 0)).reshape(-1) #reshape into one row.
-    return int(idx[0])
+    idx = np.argwhere(np.diff(np.sign(ave15i - ave5i[:len(ave15i)])!= 0)).reshape(-1)+0 #reshape into one row.
+    return idx[5]
 
-def mean(vector):
+# This is based on the method 1 where user can't choose the baseline.
+# If wanted to add that, choose method2.
+def sum_mean(vector):
     """
     This function returns the mean values.
     """
     a = 0
     for i in vector:
         a = a + i
-    return a/len(vector)
-      
+    return [a,a/len(vector)]
+
+
+def multiplica(vetor_x, vetor_y):
+    a = 0
+    for x,y in zip(vetor_x, vetor_y):
+        a = a + (x * y)
+    return a
+
+
 def linear_coeff(x, y):
     """
     This function returns the inclination coeffecient and y axis interception coeffecient m and b. 
     """
-    m = (y-mean(y)) / (x - mean(x))    
-    b = mean(y) - m * mean(x)
+    m = (multiplica(x,y) - sum_mean(x)[0] * sum_mean(y)[1]) / (multiplica(x,x) - sum_mean(x)[0] * sum_mean(x)[1])  
+    b = sum_mean(y)[1] - m * sum_mean(x)[1]
     return m, b
+
 
 def y_fitted_line(m, b, x):
     y_base = []
     for i in x:
         y = m * i + b
         y_base.append(y)
-    return y_base    
+    return y_base
+
 
 def linear_background(x, y):
-    idx = critical_idx(x, y) + 3 #this is also arbitrary number we can play with.
+    idx = critical_idx(x, y) + 5 #this is also arbitrary number we can play with.
     m, b = linear_coeff(x[(idx - int(0.5 * idx)) : (idx + int(0.5 * idx))], y[(idx - int(0.5 * idx)) : (idx + int(0.5 * idx))])
     y_base = y_fitted_line(m, b, x)
     return y_base
-
 
 def peak_detection_fxn(data_y):
     """The function takes an input of the column containing the y variables in the dataframe,
@@ -225,7 +234,7 @@ def peak_detection_fxn(data_y):
     index_list = []
 
     # split data into above and below the baseline
-    col_y1, col_y2 = main.split(data_y)
+    col_y1, col_y2 = split(data_y) # removed main. head.
 
     # detemine length of data and what 10% of the data is
     len_y = len(col_y1)
