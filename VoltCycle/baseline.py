@@ -74,7 +74,9 @@ def y_fitted_line(m, b, x):
 
 def linear_background(x, y):
     idx = critical_idx(x, y) + 3 #this is also arbitrary number we can play with.
-    m, b = linear_coeff(x[(idx - int(0.5 * idx)) : (idx + int(0.5 * idx))], y[(idx - int(0.5 * idx)) : (idx + int(0.5 * idx))])
+    x_fit = np.array(x[(idx - int(0.5 * idx)) : (idx + int(0.5 * idx))])
+    y_fit = np.array(y[(idx - int(0.5 * idx)) : (idx + int(0.5 * idx))])
+    m, b = linear_coeff(x_fit,y_fit)
     y_base = y_fitted_line(m, b, x)
     return y_base
 
