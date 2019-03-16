@@ -11,6 +11,9 @@ colors = {
     'text': '#000000'
 }
 
+image_filename = 'logo.png' # replace with your own image
+encoded_image = base64.b64encode(open(logo, 'rb').read())
+
 app.layout = html.Div(style={'backgroundColor': colors['background']}, children=[
     html.H1(
         children='Voltcycle',
@@ -20,11 +23,17 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
         }
     ),
 
+    html.Div([
+        html.Img(src='data:image/png;base64,{}'.format(encoded_image))
+    ]),
+
     html.Div(children='A tool for analysis of cyclic voltammetry.', style={
         'textAlign': 'center',
         'color': colors['text']
     })
 ])
+
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
