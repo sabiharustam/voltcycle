@@ -34,3 +34,19 @@ setup(
 
 
     install_requires=[
+       'pandas==0.23.4',
+       'matplotlib==3.0.2',
+       'numpy==1.15.4',
+       'PeakUtils==1.3.2',
+       'python==3.7.1',
+       'plotly==3.6.1',
+       'dash==0.39.0',
+       'dash-core-components==0.44.0',
+       'dash-html-components==0.14.0',
+       'dash-renderer==0.20.0',
+       'dash-resumable-upload==0.0.3',
+       'dash-table==3.6.0',
+       'dash-table-experiments==0.6.0',
+       'dashtable==1.4.5'
+    ]
+)
