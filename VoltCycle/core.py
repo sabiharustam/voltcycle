@@ -1,4 +1,5 @@
-# main functions we have used so far
+# This is a tool to automate cyclic voltametry analysis.
+# Current Version = 1
 
 import pandas as pd
 import numpy as np
