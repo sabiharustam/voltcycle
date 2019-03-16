@@ -7,8 +7,8 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 colors = {
-    'background': '#111111',
-    'text': '#7FDBFF'
+    'background': '#F8F9F9',
+    'text': '#000000'
 }
 
 app.layout = html.Div(style={'backgroundColor': colors['background']}, children=[
