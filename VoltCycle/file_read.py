@@ -96,7 +96,6 @@ def data_frame(dict_cycle, n):
     data  = pd.DataFrame(zippedList, columns = ['Potential' , 'Current'])
     return data
     
-
 def plot_fig(dict_cycle, n):
     """For basic plotting of the cycle data
   
@@ -119,8 +118,3 @@ def plot_fig(dict_cycle, n):
     plt.legend()
     plt.savefig('cycle.png')
     print('executed')
-
-
-#dict_cycle, n_cycle  = read_file('test.txt')
-#rcParams.update({'figure.autolayout': True})
-#plot(dict_cycle, n_cycle)

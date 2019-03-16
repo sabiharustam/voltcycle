@@ -1,0 +1,13 @@
+PadraoK3_Gaiola_cell3eletrodos.txt
+Trialcodes
+__init__.py
+__pycache__
+baseline.py
+calculations.py
+cv_trial.py
+file_read.py
+input.txt
+test.txt
+test_calculations.py
+trial.ipynb
+trial.png
