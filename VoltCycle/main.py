@@ -201,109 +201,186 @@ def linear_background(x, y):
     y_base = y_fitted_line(m, b, x)
     return y_base
 
-def peak_detection(data_y):
-    """ peak_detection(dataframe['y column'])
-    This function returns a list of the indecies of the y values of the peaks detected in the dataset.
-    The function takes an input of the column containing the y variables in the dataframe.
-    This column is then split into two arrays, one of the positive and one of the negative values.
-    This is because cyclic voltammetry delivers negative peaks however the peakutils function work better with positive peaks.
-    The absolute values of each of these vectors are then imported into the peakutils.indexes
-    function to determine the significant peak(s) for each array. The value(s) are then saved as a list."""
- 
+
+def peak_detection_fxn(data_y):
+    """The function takes an input of the column containing the y variables in the dataframe,
+    associated with the current. The function calls the split function, which splits the
+    column into two arrays, one of the positive and one of the negative values.
+    This is because cyclic voltammetry delivers negative peaks, but the peakutils function works
+    better with positive peaks. The function also runs on the middle 80% of data to eliminate
+    unnecessary noise and messy values associated with pseudo-peaks.The vectors are then imported
+    into the peakutils.indexes function to determine the significant peak for each array.
+    The values are stored in a list, with the first index corresponding to the top peak and the
+    second corresponding to the bottom peak.
+    Parameters
+    ______________
+    y column: must be a column from a pandas dataframe
+
+    Returns
+    _____________
+    A list with the index of the peaks from the top curve and bottom curve.
+    """
+
+    # initialize storage list
     index_list = []
 
-    y1, y2 = split(data_y)
+    # split data into above and below the baseline
+    col_y1, col_y2 = main.split(data_y)
 
-    peak_top = peakutils.indexes(abs(y1), thres=0.5, min_dist=0.001)
-    peak_bottom = peakutils.indexes(abs(y2), thres=0.5, min_dist=0.001)
-    index_list.append([peak_top[0], peak_bottom[0]])
+    # detemine length of data and what 10% of the data is
+    len_y = len(col_y1)
+    ten_percent = int(np.around(0.1*len_y))
 
+    # adjust both input columns to be the middle 80% of data
+    # (take of the first and last 10% of data)
+    # this avoid detecting peaks from electrolysis
+    # (from water splitting and not the molecule itself,
+    # which can form random "peaks")
+    mod_col_y2 = col_y2[ten_percent:len_y-ten_percent]
+    mod_col_y1 = col_y1[ten_percent:len_y-ten_percent]
+
+    # run peakutils package to detect the peaks for both top and bottom
+    peak_top = peakutils.indexes(mod_col_y2, thres=0.99, min_dist=20)
+    peak_bottom = peakutils.indexes(abs(mod_col_y1), thres=0.99, min_dist=20)
+
+    # detemine length of both halves of data
+    len_top = len(peak_top)
+    len_bot = len(peak_bottom)
+
+    # append the values to the storage list
+    # manipulate values by adding the ten_percent value back
+    # (as the indecies have moved)
+    # to detect the actual peaks and not the modified values
+    index_list.append(peak_top[int(len_top/2)]+ten_percent)
+    index_list.append(peak_bottom[int(len_bot/2)]+ten_percent)
+
+    # return storage list
+    # first value is the top, second value is the bottom
     return index_list
-def peak_potentials(data, index, potential_column_name):
-    """Outputs potentials of given peaks in cyclic voltammetry data.
 
+
+def peak_values(DataFrame_x, DataFrame_y):
+    """Outputs x (potentials) and y (currents) values from data indices
+        given by peak_detection function.
+
+       ----------
        Parameters
        ----------
-       data : Must be in the form of a pandas DataFrame
+       DataFrame_x : should be in the form of a pandas DataFrame column.
+         For example, df['potentials'] could be input as the column of x
+         data.
 
-       index : integer(s) in the form of a list or numpy array
-
-       potential_column_name : the name of the column of the DataFrame
-         which contains potentials from cyclic voltammogram. If a string,
-         must be input with single or double quotation marks
+        DataFrame_y : should be in the form of a pandas DataFrame column.
+          For example, df['currents'] could be input as the column of y
+          data.
 
        Returns
        -------
-       Result : numpy array of potentials at peaks."""
-    series = data.iloc[index][potential_column_name]
-    potentials_array = (series).values
-    return potentials_array
+       Result : numpy array of coordinates at peaks in the following order:
+         potential of peak on top curve, current of peak on top curve,
+         potential of peak on bottom curve, current of peak on bottom curve"""
+    index = peak_detection_fxn(DataFrame_y)
+    potential1, potential2 = split(DataFrame_x)
+    current1, current2 = split(DataFrame_y)
+    Peak_values = []
+    Peak_values.append(potential2[(index[0])])  # TOPX (bottom part of curve is
+    # the first part of DataFrame)
+    Peak_values.append(current2[(index[0])])  # TOPY
+    Peak_values.append(potential1[(index[1])])  # BOTTOMX
+    Peak_values.append(current1[(index[1])])  # BOTTOMY
+    Peak_array = np.array(Peak_values)
+    return Peak_array
 
 
-def del_potential(data, index, potential_column_name):
-    """Outputs the difference in potentials between anodic and cathodic peaks
-       in cyclic voltammetry data.
+def del_potential(DataFrame_x, DataFrame_y):
+    """Outputs the difference in potentials between anoidc and
+       cathodic peaks in cyclic voltammetry data.
 
        Parameters
        ----------
-       data : Must be in the form of a pandas DataFrame
+       DataFrame_x : should be in the form of a pandas DataFrame column.
+         For example, df['potentials'] could be input as the column of x
+         data.
 
-       index : integer(s) in the form of a list or numpy array
+        DataFrame_y : should be in the form of a pandas DataFrame column.
+          For example, df['currents'] could be input as the column of y
+          data.
 
-       potential_column_name : the name of the column of the DataFrame
-         which contains potentials from cyclic voltammogram. If a string,
-         must be input with single or double quotation marks.
-
-       Returns
-       -------
-       Results : difference in the form of a floating point number. """
-    del_potential = (
-        peak_potentials(data, index, potential_column_name)[1] -
-        peak_potentials(data, index, potential_column_name)[0]
-    )
-    return del_potential
+        Returns
+        -------
+        Results: difference in peak potentials in the form of a numpy array."""
+    del_potentials = (peak_values(DataFrame_x, DataFrame_y)[0] -
+                      peak_values(DataFrame_x, DataFrame_y)[2])
+    return del_potentials
 
 
-def half_wave_potential(data, index, potential_column_name):
+def half_wave_potential(DataFrame_x, DataFrame_y):
     """Outputs the half wave potential(redox potential) from cyclic
        voltammetry data.
 
        Parameters
        ----------
-       data : Must be in the form of a pandas DataFrame
+       DataFrame_x : should be in the form of a pandas DataFrame column.
+         For example, df['potentials'] could be input as the column of x
+         data.
 
-       index : integer(s) in the form of a list or numpy array
-
-       potential_column_name : the name of the column of the DataFrame
-         which contains potentials from cyclic voltammogram. If a string,
-         must be input with single or double quotation marks
+        DataFrame_y : should be in the form of a pandas DataFrame column.
+          For example, df['currents'] could be input as the column of y
+          data.
 
        Returns
        -------
        Results : the half wave potential in the form of a
          floating point number."""
-    half_wave_potential = (del_potential(data, index, potential_column_name))/2
+    half_wave_potential = (del_potential(DataFrame_x, DataFrame_y))/2
     return half_wave_potential
 
 
-def peak_currents(data, index, current_column_name):
-    """Outputs currents of given peaks in cyclic voltammetry data.
+def peak_heights(DataFrame_x, DataFrame_y):
+    """Outputs heights of minimum peak and maximum
+         peak from cyclic voltammetry data.
 
        Parameters
        ----------
-       data : Must be in the form of a pandas DataFrame
+       DataFrame_x : should be in the form of a pandas DataFrame column.
+         For example, df['potentials'] could be input as the column of x
+         data.
 
-       index : integer(s) in the form of a list or numpy array
+        DataFrame_y : should be in the form of a pandas DataFrame column.
+          For example, df['currents'] could be input as the column of y
+          data.
 
-       current_column_name : the name of the column of the DataFrame
-         which contains potentials from cyclic voltammogram. If a string,
-         must be input with single or double quotation marks
+        Returns
+        -------
+        Results: height of maximum peak, height of minimum peak
+          in that order in the form of a list."""
+    current_max = peak_values(DataFrame_x, DataFrame_y)[1]
+    current_min = peak_values(DataFrame_x, DataFrame_y)[3]
+    x1, x2 = split(DataFrame_x)
+    y1, y2 = split(DataFrame_y)
+    line_at_min = linear_background(x1, y1)[peak_detection_fxn(DataFrame_y)[1]]
+    line_at_max = linear_background(x2, y2)[peak_detection_fxn(DataFrame_y)[0]]
+    height_of_max = current_max - line_at_max
+    height_of_min = abs(current_min - line_at_min)
+    return [height_of_max, height_of_min]
+
+
+def peak_ratio(DataFrame_x, DataFrame_y):
+    """Outputs the peak ratios from cyclic voltammetry data.
+
+       Parameters
+       ----------
+       DataFrame_x : should be in the form of a pandas DataFrame column.
+         For example, df['potentials'] could be input as the column of x
+         data.
+
+        DataFrame_y : should be in the form of a pandas DataFrame column.
+          For example, df['currents'] could be input as the column of y
+          data.
 
        Returns
        -------
-       Result : numpy array of currents at peaks"""
-    series = data.iloc[index][current_column_name]
-    currents_array = (series).values
-    return currents_array
-
-
+       Result : returns a floating point number, the peak ratio."""
+    ratio = (peak_heights(DataFrame_x, DataFrame_y)[0] /
+             peak_heights(DataFrame_x, DataFrame_y)[1])
+    return ratio
