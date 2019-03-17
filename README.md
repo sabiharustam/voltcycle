@@ -5,6 +5,7 @@ This package can be used to take cyclic voltammetry data, clean and plot the dat
 ### Software Dependencies 
 - Python3 
 - For python packages see requirements.txt
+- hdhh
 
 ## Organization of the project
 ``` 
