@@ -25,8 +25,12 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
     ),
 
     html.Div([
-        html.Img(src='data:image/png;base64,{}'.format(encoded_image))
-    ]),
+        html.Img(draggable=True, style={
+                'height': '50%',
+                'width': '50%',
+                'textAlign': 'center'
+            },  src='data:image/png;base64,{}'.format(encoded_image))
+   ], style={'textAlign': 'center', 'height': '50%', 'width': '50%'}),
 
     html.Div(children='A tool for analysis of cyclic voltammetry.', style={
         'textAlign': 'center',
