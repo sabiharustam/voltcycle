@@ -8,7 +8,18 @@ import matplotlib.cbook
 #split forward and backward sweping data, to make it easier for processing.
 def split(vector):
     """
-    This function takes an array and splits it into two half.
+    This function takes an array and splits it into equal two half.
+    ----------
+    Parameters
+    ----------
+    vector : Can be in any form of that can be turned into numpy array.
+    Normally, for the use of this function, it expects pandas DataFrame column.
+    For example, df['potentials'] could be input as the column of x data.
+
+    Returns
+    -------
+    This function returns two equally splited vector. 
+    The output then can be used to ease the implementation of peak detection and baseline finding.
     """
     split = int(len(vector)/2)
     end = int(len(vector))
@@ -21,9 +32,20 @@ def critical_idx(x, y): ## Finds index where data set is no longer linear
     """
     This function takes x and y values callculate the derrivative of x and y, and calculate moving average of 5 and 15 points.
     Finds intercepts of different moving average curves and return the indexs of the first intercepts.
+    ----------
+    Parameters
+    ----------
+    x : Numpy array.
+    y : Numpy array.
+    Normally, for the use of this function, it expects numpy array that came out from split function.
+    For example, output of split.df['potentials'] could be input for this function as x.
+    Returns
+    -------
+    This function returns index of the 
+    The output then can be used to ease the implementation of peak detection and baseline finding.
     """
     k = np.diff(y)/(np.diff(x)) #calculated slops of x and y
-    ## Calculate moving average for 5 and 15 points.
+    ## Calculate moving average for 10 and 15 points.
     ## This two arbitrary number can be tuned to get better fitting.
     ave10 = []
     ave15 = []
@@ -31,20 +53,17 @@ def critical_idx(x, y): ## Finds index where data set is no longer linear
         a = 0 
         for j in range(0,5):
             a = a + k[i+j]
-        ave10.append(round(a/5, 5)) # keeping 9 desimal points for more accuracy
-    
+        ave10.append(round(a/10, 5)) # keeping 9 desimal points for more accuracy
     for i in range(len(k)-15): 
         b = 0 
-        for j in range(0,10):
+        for j in range(0,15):
             b = b + k[i+j]
-        ave15.append(round(b/10, 5))
-    ave10i = np.asarray(ave5)
-    print(ave10i)
+        ave15.append(round(b/15, 5))
+    ave10i = np.asarray(ave10)
     ave15i = np.asarray(ave15)
-    print(ave15i)
     ## Find intercepts of different moving average curves
     idx = np.argwhere(np.diff(np.sign(ave15i - ave10i[:len(ave15i)])!= 0)).reshape(-1)+0 #reshape into one row.
-    return idx[1]
+    return idx[5]
 
 # This is based on the method 1 where user can't choose the baseline.
 # If wanted to add that, choose method2.
