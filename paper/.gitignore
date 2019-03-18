@@ -3,6 +3,12 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+#Python bytecode
+*.pyc
+
+#notebook temporary files
+.ipynb_checkpoints
+
 # C extensions
 *.so
 
