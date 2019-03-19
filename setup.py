@@ -18,7 +18,7 @@ setup(
     # install this project using:
     # $ pip install voltcycle
     #
-    # PyPI URL:
+    # PyPI URL: https://pypi.org/project/voltcycle/
     name='voltcycle',
 
     # Versions should comply with PEP 440:
