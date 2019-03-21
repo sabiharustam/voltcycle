@@ -41,8 +41,8 @@ def critical_idx(x, y): ## Finds index where data set is no longer linear
     For example, output of split.df['potentials'] could be input for this function as x.
     Returns
     -------
-    This function returns index of the 
-    The output then can be used to ease the implementation of peak detection and baseline finding.
+    This function returns 5th index of the intercepts of different moving average curves. 
+    User can change this function according to baseline branch method 2 to get various indexes..
     """
     k = np.diff(y)/(np.diff(x)) #calculated slops of x and y
     ## Calculate moving average for 10 and 15 points.
@@ -69,7 +69,13 @@ def critical_idx(x, y): ## Finds index where data set is no longer linear
 # If wanted to add that, choose method2.
 def sum_mean(vector):
     """
-    This function returns the mean values.
+    This function returns the mean and sum of the given vector. 
+		----------                                                                                                             
+    Parameters
+    ----------
+		vector : Can be in any form of that can be turned into numpy array.
+    Normally, for the use of this function, it expects pandas DataFrame column.
+    For example, df['potentials'] could be input as the column of x data.
     """
     a = 0
     for i in vector:
