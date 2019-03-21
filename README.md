@@ -1,6 +1,6 @@
 # Voltcycle  <img align="center" src="images/logo.png" width="150"> 
 [![Build Status](https://travis-ci.org/sabiharustam/voltcycle.svg?branch=master)](https://travis-ci.org/sabiharustam/voltcycle)
-
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sabiharustam/voltcycle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sabiharustam/voltcycle/?branch=master)
 ## Package for Cyclic Voltammetry Visualization and Analysis
 This package can be used to take cyclic voltammetry data, clean and plot the data, find and fit peaks to obtain peak locations. It also creates baseline and based on peak location, calculates the peak current and voltage. Finally use those descriptors to classify a battery material as either electrochemically reversable or not, also to determine if it is anolyte or catholyte. Additionally, there is a GUI based visualization app that can be used to upload the users data, choose the plotting style and color. This package could be expanded upon to be able to handle different formats of data. For a more specific overview of the project, please see the usecase under docs. 
 
