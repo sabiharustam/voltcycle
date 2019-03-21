@@ -35,6 +35,50 @@ def read_cycle(data):
     return df
 
 
+def read_file_dash(lines):
+    """This function is exactly similar to read_file, but it is for dash
+
+    Parameters
+    __________
+    file: lines from dash input file
+
+    Returns:
+    ________
+    dict_of_df: dictionary of dataframes with keys = cycle numbers and
+    values = dataframes for each cycle
+    n_cycle: number of cycles in the raw file
+    """
+    dict_of_df = {}
+    h = 0
+    l = 0
+    n_cycle = 0
+    number = 0
+    #a = []
+    #with open(file, 'rt') as f:
+    #    print(file + ' Opened')
+    for line in lines:
+        record = 0
+        if not (h and l):
+            if line.startswith('SCANRATE'):
+                scan_rate = float(line.split()[2])
+                h = 1
+            if line.startswith('STEPSIZE'):
+                step_size = float(line.split()[2])
+                l = 1
+        if line.startswith('CURVE'):
+            n_cycle += 1
+            if n_cycle > 1:
+                number = n_cycle - 1
+                df = read_cycle(a)
+                key_name = 'cycle_' + str(number)
+                #key_name = number
+                dict_of_df[key_name] = copy.deepcopy(df)
+            a = []
+        if n_cycle:
+            a.append(line)
+    return dict_of_df, number
+
+
 def read_file(file):
     """This function reads the raw data file, gets the scanrate and stepsize
     and then reads the lines according to cycle number. Once it reads the data
