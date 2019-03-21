@@ -1,3 +1,9 @@
+# This module is to fit baseline to calculate peak current
+# values from cyclic voltammetry data.
+# If you wish to choose best fitted baseline,
+# checkout branch baseline_old method2.
+# If have any questions contact sabiha3@uw.edu
+ 
 import pandas as pd
 import numpy as np
 import csv
@@ -56,11 +62,14 @@ def critical_idx(x, y): ## Finds index where data set is no longer linear
     ## This two arbitrary number can be tuned to get better fitting.
     ave10 = []
     ave15 = []
-    for i in range(len(k)-10):  # The reason to minus 5 is to prevent j from running out of index.
+    for i in range(len(k)-10):
+	# The reason to minus 10 is to prevent j from running out of index.
         a = 0 
         for j in range(0,5):
             a = a + k[i+j]
-        ave10.append(round(a/10, 5)) # keeping 9 desimal points for more accuracy
+        ave10.append(round(a/10, 5)) 
+	# keeping 5 desimal points for more accuracy
+	# This numbers affect how sensitive to noise.
     for i in range(len(k)-15): 
         b = 0 
         for j in range(0,15):
@@ -69,11 +78,13 @@ def critical_idx(x, y): ## Finds index where data set is no longer linear
     ave10i = np.asarray(ave10)
     ave15i = np.asarray(ave15)
     ## Find intercepts of different moving average curves
-    idx = np.argwhere(np.diff(np.sign(ave15i - ave10i[:len(ave15i)])!= 0)).reshape(-1)+0 #reshape into one row.
+    #reshape into one row. 
+		idx = np.argwhere(np.diff(np.sign(ave15i - ave10i[:len(ave15i)])!= 0)).reshape(-1)+0
     return idx[5]
-
 # This is based on the method 1 where user can't choose the baseline.
 # If wanted to add that, choose method2.
+
+
 def sum_mean(vector):
     """
     This function returns the mean and sum of the given vector. 
@@ -91,7 +102,7 @@ def sum_mean(vector):
     return [a,a/len(vector)]
 
 
-def multiplica(vetor_x, vetor_y):
+def multiplica(vector_x, vector_y):
     """
     This function returns the sum of the multilica of two given vector. 
     ----------                                                                                                             
@@ -104,8 +115,10 @@ def multiplica(vetor_x, vetor_y):
     -------
     This function returns a number that is the sum of multiplicity of given two vector.
     """
+    assert type(vector_x) == np.ndarray, "Input of the function should be numpy array"
+    assert type(vector_y) == np.ndarray, "Input of the function should be numpy array"
     a = 0
-    for x,y in zip(vetor_x, vetor_y):
+    for x,y in zip(vector_x, vector_y):
         a = a + (x * y)
     return a
 
@@ -162,6 +175,8 @@ def linear_background(x, y):
     -------
     List of constructed y_labels.
     """
+    assert type(x) == np.ndarray, "Input of the function should be numpy array"
+    assert type(y) == np.ndarray, "Input of the function should be numpy array"
     idx = critical_idx(x, y) + 5 #this is also arbitrary number we can play with.
     m, b = linear_coeff(x[(idx - int(0.5 * idx)) : (idx + int(0.5 * idx))], y[(idx - int(0.5 * idx)) : (idx + int(0.5 * idx))])
     y_base = y_fitted_line(m, b, x)
