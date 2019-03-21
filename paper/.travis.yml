@@ -15,7 +15,7 @@ install:
 - travis_retry pip install -e .
 
 script:
-- py.test --pyargs sabiharustam/Voltcycle --cov-report term-missing --cov=sabiharustam/Voltcycle
+- py.test --pyargs https://github.com/sabiharustam/voltcycle.git --cov-report term-missing --cov=https://github.com/sabiharustam/voltcycle.git
 #- tox
 - coverage report
 
