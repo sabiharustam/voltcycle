@@ -22,8 +22,8 @@ def read_cycle(data):
 
     Returns
     _______
-    A dataframe with potential and current columns  
-    """     
+    A dataframe with potential and current columns
+    """
 
     current = []
     potential = []
@@ -82,9 +82,9 @@ def read_file_dash(lines):
 def read_file(file):
     """This function reads the raw data file, gets the scanrate and stepsize
     and then reads the lines according to cycle number. Once it reads the data
-    for one cycle, it calls read_cycle function to generate a dataframe. It 
+    for one cycle, it calls read_cycle function to generate a dataframe. It
     does the same thing for all the cycles and finally returns a dictionary,
-    the keys of which are the cycle numbers and the values are the 
+    the keys of which are the cycle numbers and the values are the
     corresponding dataframes.
 
     Parameters
@@ -95,9 +95,9 @@ def read_file(file):
     ________
     dict_of_df: dictionary of dataframes with keys = cycle numbers and
     values = dataframes for each cycle
-    n_cycle: number of cycles in the raw file  
-    """   
-    dict_of_df = {} 
+    n_cycle: number of cycles in the raw file
+    """
+    dict_of_df = {}
     h = 0
     l = 0
     n_cycle = 0
@@ -141,7 +141,7 @@ def data_frame(dict_cycle, n):
 
     Returns:
     _______
-    Dataframe correcponding to the cycle number 
+    Dataframe correcponding to the cycle number
     """
     list1, list2 = (list(dict_cycle.get('cycle_'+str(n)).items()))
     zippedList = list(zip(list1[1], list2[1]))
@@ -151,20 +151,20 @@ def data_frame(dict_cycle, n):
 
 def plot_fig(dict_cycle, n):
     """For basic plotting of the cycle data
-  
+
     Parameters
     __________
     dict: dictionary of dataframes for all the cycles
     n: number of cycles
 
-    Saves the plot in a file called cycle.png 
+    Saves the plot in a file called cycle.png
     """
 
     for i in range(n):
         print(i+1)
         df = data_frame(dict_cycle, i+1)
         plt.plot(df.Potential, df.Current, label = "Cycle{}".format(i+1))
-        
+
     #print(df.head())
     plt.xlabel('Voltage')
     plt.ylabel('Current')
@@ -186,7 +186,7 @@ def split(vector):
     -------
     Returns
     -------
-    This function returns two equally splited vector. 
+    This function returns two equally splited vector.
     The output then can be used to ease the implementation of peak detection and baseline finding.
     """
     assert type(vector) == pd.core.series.Series, "Input of the function should be pandas series"
@@ -197,7 +197,7 @@ def split(vector):
     return vector1, vector2
 
 
-def critical_idx(x, y): ## Finds index where data set is no longer linear 
+def critical_idx(x, y): ## Finds index where data set is no longer linear
     """
     This function takes x and y values callculate the derrivative of x and y, and calculate moving average of 5 and 15 points.
     Finds intercepts of different moving average curves and return the indexs of the first intercepts.
@@ -211,7 +211,7 @@ def critical_idx(x, y): ## Finds index where data set is no longer linear
     -------
     Returns
     -------
-    This function returns 5th index of the intercepts of different moving average curves. 
+    This function returns 5th index of the intercepts of different moving average curves.
     User can change this function according to baseline branch method 2 to get various indexes..
     """
     assert type(x) == np.ndarray, "Input of the function should be numpy array"
@@ -226,21 +226,21 @@ def critical_idx(x, y): ## Finds index where data set is no longer linear
     ave15 = []
     for i in range(len(k)-10):
     # The reason to minus 10 is to prevent j from running out of index.
-        a = 0 
+        a = 0
         for j in range(0,5):
             a = a + k[i+j]
-        ave10.append(round(a/10, 5)) 
+        ave10.append(round(a/10, 5))
     # keeping 5 desimal points for more accuracy
     # This numbers affect how sensitive to noise.
-    for i in range(len(k)-15): 
-        b = 0 
+    for i in range(len(k)-15):
+        b = 0
         for j in range(0,15):
             b = b + k[i+j]
         ave15.append(round(b/15, 5))
     ave10i = np.asarray(ave10)
     ave15i = np.asarray(ave15)
     ## Find intercepts of different moving average curves
-    #reshape into one row. 
+    #reshape into one row.
     idx = np.argwhere(np.diff(np.sign(ave15i - ave10i[:len(ave15i)])!= 0)).reshape(-1)+0
     return idx[5]
 # This is based on the method 1 where user can't choose the baseline.
@@ -249,8 +249,8 @@ def critical_idx(x, y): ## Finds index where data set is no longer linear
 
 def sum_mean(vector):
     """
-    This function returns the mean and sum of the given vector. 
-    ----------                                                                                                             
+    This function returns the mean and sum of the given vector.
+    ----------
     Parameters
     ----------
     vector : Can be in any form of that can be turned into numpy array.
@@ -266,8 +266,8 @@ def sum_mean(vector):
 
 def multiplica(vector_x, vector_y):
     """
-    This function returns the sum of the multilica of two given vector. 
-    ----------                                                                                                             
+    This function returns the sum of the multilica of two given vector.
+    ----------
     Parameters
     ----------
     vector_x, vector_y : Output of the split vector function.
@@ -286,8 +286,8 @@ def multiplica(vector_x, vector_y):
 
 def linear_coeff(x, y):
     """
-    This function returns the inclination coeffecient and y axis interception coeffecient m and b. 
-    ----------                                                                                                             
+    This function returns the inclination coeffecient and y axis interception coeffecient m and b.
+    ----------
     Parameters
     ----------
     x : Output of the split vector function.
@@ -297,15 +297,15 @@ def linear_coeff(x, y):
     -------
     float number of m and b.
     """
-    m = (multiplica(x,y) - sum_mean(x)[0] * sum_mean(y)[1]) / (multiplica(x,x) - sum_mean(x)[0] * sum_mean(x)[1])  
+    m = (multiplica(x,y) - sum_mean(x)[0] * sum_mean(y)[1]) / (multiplica(x,x) - sum_mean(x)[0] * sum_mean(x)[1])
     b = sum_mean(y)[1] - m * sum_mean(x)[1]
     return m, b
 
 
 def y_fitted_line(m, b, x):
     """
-    This function returns the fitted baseline constructed by coeffecient m and b and x values. 
-    ----------                                                                                                             
+    This function returns the fitted baseline constructed by coeffecient m and b and x values.
+    ----------
     Parameters
     ----------
     x : Output of the split vector function. x value of the input.
@@ -326,12 +326,12 @@ def y_fitted_line(m, b, x):
 def linear_background(x, y):
     """
     This function is wrapping function for calculating linear fitted line.
-    It takes x and y values of the cv data, returns the fitted baseline. 
-    ----------                                                                                                             
+    It takes x and y values of the cv data, returns the fitted baseline.
+    ----------
     Parameters
     ----------
     x : Output of the split vector function. x value of the cyclic voltammetry data.
-    y : Output of the split vector function. y value of the cyclic voltammetry data. 
+    y: Output of the split vector function. y value of the cyclic voltammetry data.
     -------
     Returns
     -------
