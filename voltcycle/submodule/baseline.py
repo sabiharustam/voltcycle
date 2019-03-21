@@ -21,7 +21,7 @@ def split(vector):
     This function returns two equally splited vector. 
     The output then can be used to ease the implementation of peak detection and baseline finding.
     """
-    assert type(vector) == np.ndarray, "Input of the function should be numpy array"
+    assert type(vector) == pd.core.series.Series, "Input of the function should be pandas series"
     split = int(len(vector)/2)
     end = int(len(vector))
     vector1 = np.array(vector)[0:split]
@@ -48,6 +48,9 @@ def critical_idx(x, y): ## Finds index where data set is no longer linear
     """
     assert type(x) == np.ndarray, "Input of the function should be numpy array"
     assert type(y) == np.ndarray, "Input of the function should be numpy array"
+    if x.shape[0] != y.shape[0]:
+        raise ValueError("x and y must have same first dimension, but "
+                        "have shapes {} and {}".format(x.shape, y.shape))
     k = np.diff(y)/(np.diff(x)) #calculated slops of x and y
     ## Calculate moving average for 10 and 15 points.
     ## This two arbitrary number can be tuned to get better fitting.
