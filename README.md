@@ -1,4 +1,5 @@
 # Voltcycle  <img align="center" src="images/logo.png" width="150"> 
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://travis-ci.org/sabiharustam/voltcycle.svg?branch=master)]
 (https://travis-ci.org/sabiharustam/voltcycle)
 
@@ -54,3 +55,29 @@ README.md
 requirements.txt(FOR DEPENDENCIES)
 setup.py(if we have final installable)
 ```
+
+
+## User Interface
+![dash_interface](https://github.com/sabiharustam/voltcycle/blob/master/images/dash_interface.png)
+
+## Howto
+The example usage of the functions are shown in example folder ipython notebook. User can use functions in ipython notebook 
+to analyze their data without DASH interface. User can also obtain high quality images using example.ipynb. Here is an 
+example image:
+![example](https://github.com/sabiharustam/voltcycle/blob/master/images/example.png)
+After install the requirements, user can use dash interface for more interactive data visualization. Users can upload raw 
+cyclc voltammetry data, the app then will plot the cv plots with peaks and baseline included. Under the plots all the 
+calculated values and classification of electrolyte are shown in table format.
+User can download the plots using right click save figure.
+
+## Workflow of the Project
+![workflow](https://github.com/sabiharustam/voltcycle/blob/master/images/workflow.png)
+
+See our poster for the quarter summary 
+[here](https://github.com/sabiharustam/voltcycle/blob/master/docs/voltcycle_poster.pdf)
+
+This package is still under development. If you have any questions please email authors. 
+
+### References for images:
+https://www.fotolia.com/id/209712729
+https://www.youtube.com/watch?v=3l1hJzUqi2A 

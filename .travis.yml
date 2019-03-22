@@ -14,6 +14,16 @@ install:
 - travis_retry pip install $PIP_DEPS
 - travis_retry pip install -r requirements.txt
 - travis_retry pip install -e .
+# Has to install miniconda to achive conda installation
+# download and install miniconda
+- wget http://repo.continuum.io/miniconda/Miniconda3-4.1.11-Linux-x86_64.sh -O miniconda.sh;
+- bash miniconda.sh -b -p $HOME/conda
+- export PATH="$HOME/conda/bin:$PATH"
+- hash -r
+- conda config --set always_yes yes --set changeps1 no
+- conda update -q conda
+- conda install -c conda-forge matplotlib
+
 
 script:
 - py.test --pyargs https://github.com/sabiharustam/voltcycle.git --cov-report term-missing --cov=https://github.com/sabiharustam/voltcycle.git
