@@ -31,7 +31,7 @@ def read_cycle(data):
         current.append(float(i.split("\t")[4]))
         potential.append(float(i.split("\t")[3]))
     zippedList = list(zip(potential, current))
-    df = pd.DataFrame(zippedList, columns = ['Potential' , 'Current'])
+    df = pd.DataFrame(zippedList, columns=['Potential', 'Current'])
     return df
 
 
@@ -50,28 +50,28 @@ def read_file_dash(lines):
     """
     dict_of_df = {}
     h = 0
-    l = 0
+    j = 0
     n_cycle = 0
     number = 0
-    #a = []
-    #with open(file, 'rt') as f:
+    # a = []
+    # with open(file, 'rt') as f:
     #    print(file + ' Opened')
     for line in lines:
         record = 0
-        if not (h and l):
+        if not (h and j):
             if line.startswith('SCANRATE'):
                 scan_rate = float(line.split()[2])
                 h = 1
             if line.startswith('STEPSIZE'):
                 step_size = float(line.split()[2])
-                l = 1
+                j = 1
         if line.startswith('CURVE'):
             n_cycle += 1
             if n_cycle > 1:
                 number = n_cycle - 1
                 df = read_cycle(a)
                 key_name = 'cycle_' + str(number)
-                #key_name = number
+                # key_name = number
                 dict_of_df[key_name] = copy.deepcopy(df)
             a = []
         if n_cycle:
@@ -99,9 +99,9 @@ def read_file(file):
     """
     dict_of_df = {}
     h = 0
-    l = 0
+    j = 0
     n_cycle = 0
-    #a = []
+    # a = []
     with open(file, 'rt') as f:
         print(file + ' Opened')
         for line in f:
@@ -112,24 +112,23 @@ def read_file(file):
                     h = 1
                 if line.startswith('STEPSIZE'):
                     step_size = float(line.split()[2])
-                    l = 1
+                    j = 1
             if line.startswith('CURVE'):
                 n_cycle += 1
                 if n_cycle > 1:
                     number = n_cycle - 1
                     df = read_cycle(a)
                     key_name = 'cycle_' + str(number)
-                    #key_name = number
+                    # key_name = number
                     dict_of_df[key_name] = copy.deepcopy(df)
                 a = []
             if n_cycle:
                 a.append(line)
     return dict_of_df, number
+# df = pd.DataFrame(list(dict1['df_1'].items()))
+# list1, list2 = list(dict1['df_1'].items())
+# list1, list2 = list(dict1.get('df_'+str(1)))
 
-
-#df = pd.DataFrame(list(dict1['df_1'].items()))
-#list1, list2 = list(dict1['df_1'].items())
-#list1, list2 = list(dict1.get('df_'+str(1)))
 
 def data_frame(dict_cycle, n):
     """Reads the dictionary of dataframes and returns dataframes for each cycle
@@ -145,7 +144,7 @@ def data_frame(dict_cycle, n):
     """
     list1, list2 = (list(dict_cycle.get('cycle_'+str(n)).items()))
     zippedList = list(zip(list1[1], list2[1]))
-    data  = pd.DataFrame(zippedList, columns = ['Potential' , 'Current'])
+    data = pd.DataFrame(zippedList, columns=['Potential', 'Current'])
     return data
 
 
@@ -163,9 +162,9 @@ def plot_fig(dict_cycle, n):
     for i in range(n):
         print(i+1)
         df = data_frame(dict_cycle, i+1)
-        plt.plot(df.Potential, df.Current, label = "Cycle{}".format(i+1))
+        plt.plot(df.Potential, df.Current, label="Cycle{}".format(i+1))
 
-    #print(df.head())
+    # print(df.head())
     plt.xlabel('Voltage')
     plt.ylabel('Current')
     plt.legend()
@@ -173,7 +172,7 @@ def plot_fig(dict_cycle, n):
     print('executed')
 
 
-#split forward and backward sweping data, to make it easier for processing.
+# split forward and backward sweping data, to make it easier for processing.
 def split(vector):
     """
     This function takes an array and splits it into equal two half.
@@ -187,9 +186,11 @@ def split(vector):
     Returns
     -------
     This function returns two equally splited vector.
-    The output then can be used to ease the implementation of peak detection and baseline finding.
+    The output then can be used to ease the implementation
+    of peak detection and baseline finding.
     """
-    assert type(vector) == pd.core.series.Series, "Input of the function should be pandas series"
+    (assert type(vector) == pd.core.series.Series,
+        "Input of the function should be pandas series")
     split = int(len(vector)/2)
     end = int(len(vector))
     vector1 = np.array(vector)[0:split]
@@ -197,51 +198,60 @@ def split(vector):
     return vector1, vector2
 
 
-def critical_idx(x, y): ## Finds index where data set is no longer linear
+def critical_idx(x, y):  # Finds index where data set is no longer linear
     """
-    This function takes x and y values callculate the derrivative of x and y, and calculate moving average of 5 and 15 points.
-    Finds intercepts of different moving average curves and return the indexs of the first intercepts.
+    This function takes x and y values callculate the derrivative
+    of x and y, and calculate moving average of 5 and 15 points.
+    Finds intercepts of different moving average curves and
+    return the indexs of the first intercepts.
     ----------
     Parameters
     ----------
     x : Numpy array.
     y : Numpy array.
-    Normally, for the use of this function, it expects numpy array that came out from split function.
-    For example, output of split.df['potentials'] could be input for this function as x.
+    Normally, for the use of this function, it expects
+    numpy array that came out from split function.
+    For example, output of split.df['potentials']
+    could be input for this function as x.
     -------
     Returns
     -------
-    This function returns 5th index of the intercepts of different moving average curves.
-    User can change this function according to baseline branch method 2 to get various indexes..
+    This function returns 5th index of the intercepts
+    of different moving average curves.
+    User can change this function according to
+    baseline branch method 2 to get various indexes.
     """
-    assert type(x) == np.ndarray, "Input of the function should be numpy array"
-    assert type(y) == np.ndarray, "Input of the function should be numpy array"
+    (assert type(x) == np.ndarray,
+     "Input of the function should be numpy array")
+    (assert type(y) == np.ndarray,
+     "Input of the function should be numpy array")
     if x.shape[0] != y.shape[0]:
         raise ValueError("x and y must have same first dimension, but "
-                        "have shapes {} and {}".format(x.shape, y.shape))
-    k = np.diff(y)/(np.diff(x)) #calculated slops of x and y
-    ## Calculate moving average for 10 and 15 points.
-    ## This two arbitrary number can be tuned to get better fitting.
+                         "have shapes {} and {}".format(x.shape, y.shape))
+    k = np.diff(y)/(np.diff(x))  # calculated slops of x and y
+    # Calculate moving average for 10 and 15 points.
+    # This two arbitrary number can be tuned to get better fitting.
     ave10 = []
     ave15 = []
     for i in range(len(k)-10):
-    # The reason to minus 10 is to prevent j from running out of index.
+        # The reason to minus 10 is to prevent j from running out of index.
         a = 0
-        for j in range(0,5):
+        for j in range(0, 5):
             a = a + k[i+j]
         ave10.append(round(a/10, 5))
     # keeping 5 desimal points for more accuracy
     # This numbers affect how sensitive to noise.
     for i in range(len(k)-15):
         b = 0
-        for j in range(0,15):
+        for j in range(0, 15):
             b = b + k[i+j]
         ave15.append(round(b/15, 5))
     ave10i = np.asarray(ave10)
     ave15i = np.asarray(ave15)
-    ## Find intercepts of different moving average curves
-    #reshape into one row.
-    idx = np.argwhere(np.diff(np.sign(ave15i - ave10i[:len(ave15i)])!= 0)).reshape(-1)+0
+    # Find intercepts of different moving average curves
+    # reshape into one row.
+    idx = {np.argwhere(np.diff(np.sign(ave15i -
+                               ave10i[:len(ave15i)]) != 0)).reshape(-1) + 0}
     return idx[5]
 # This is based on the method 1 where user can't choose the baseline.
 # If wanted to add that, choose method2.
@@ -257,11 +267,12 @@ def sum_mean(vector):
     Normally, for the use of this function, it expects pandas DataFrame column.
     For example, df['potentials'] could be input as the column of x data.
     """
-    assert type(vector) == np.ndarray, "Input of the function should be numpy array"
+    (assert type(vector) == np.ndarray,
+     "Input of the function should be numpy array")
     a = 0
     for i in vector:
         a = a + i
-    return [a,a/len(vector)]
+    return [a, a/len(vector)]
 
 
 def multiplica(vector_x, vector_y):
@@ -275,18 +286,23 @@ def multiplica(vector_x, vector_y):
     -------
     Returns
     -------
-    This function returns a number that is the sum of multiplicity of given two vector.
+    This function returns a number that is the sum
+    of multiplicity of given two vector.
     """
-    assert type(vector_x) == np.ndarray, "Input of the function should be numpy array"
-    assert type(vector_y) == np.ndarray, "Input of the function should be numpy array"
+    (assert type(vector_x) == np.ndarray,
+     "Input of the function should be numpy array")
+    (assert type(vector_y) == np.ndarray,
+     "Input of the function should be numpy array")
     a = 0
-    for x,y in zip(vector_x, vector_y):
+    for x, y in zip(vector_x, vector_y):
         a = a + (x * y)
     return a
 
+
 def linear_coeff(x, y):
     """
-    This function returns the inclination coeffecient and y axis interception coeffecient m and b.
+    This function returns the inclination coeffecient and
+    y axis interception coeffecient m and b.
     ----------
     Parameters
     ----------
@@ -297,14 +313,16 @@ def linear_coeff(x, y):
     -------
     float number of m and b.
     """
-    m = (multiplica(x,y) - sum_mean(x)[0] * sum_mean(y)[1]) / (multiplica(x,x) - sum_mean(x)[0] * sum_mean(x)[1])
+    m = {(multiplica(x, y) - sum_mean(x)[0] * sum_mean(y)[1]) /
+         (multiplica(x, x) - sum_mean(x)[0] * sum_mean(x)[1])}
     b = sum_mean(y)[1] - m * sum_mean(x)[1]
     return m, b
 
 
 def y_fitted_line(m, b, x):
     """
-    This function returns the fitted baseline constructed by coeffecient m and b and x values.
+    This function returns the fitted baseline constructed
+    by coeffecient m and b and x values.
     ----------
     Parameters
     ----------
@@ -330,8 +348,10 @@ def linear_background(x, y):
     ----------
     Parameters
     ----------
-    x : Output of the split vector function. x value of the cyclic voltammetry data.
-    y: Output of the split vector function. y value of the cyclic voltammetry data.
+    x : Output of the split vector function. x value
+    of the cyclic voltammetry data.
+    y : Output of the split vector function. y value
+    of the cyclic voltammetry data.
     -------
     Returns
     -------
@@ -339,21 +359,26 @@ def linear_background(x, y):
     """
     assert type(x) == np.ndarray, "Input of the function should be numpy array"
     assert type(y) == np.ndarray, "Input of the function should be numpy array"
-    idx = critical_idx(x, y) + 5 #this is also arbitrary number we can play with.
-    m, b = linear_coeff(x[(idx - int(0.5 * idx)) : (idx + int(0.5 * idx))], y[(idx - int(0.5 * idx)) : (idx + int(0.5 * idx))])
+    idx = critical_idx(x, y) + 5
+    # this is also arbitrary number we can play with.
+    m, b = {linear_coeff(x[(idx - int(0.5 * idx)): (idx + int(0.5 * idx))],
+                         y[(idx - int(0.5 * idx)): (idx + int(0.5 * idx))])}
     y_base = y_fitted_line(m, b, x)
     return y_base
 
+
 def peak_detection_fxn(data_y):
-    """The function takes an input of the column containing the y variables in the dataframe,
-    associated with the current. The function calls the split function, which splits the
-    column into two arrays, one of the positive and one of the negative values.
-    This is because cyclic voltammetry delivers negative peaks, but the peakutils function works
-    better with positive peaks. The function also runs on the middle 80% of data to eliminate
-    unnecessary noise and messy values associated with pseudo-peaks.The vectors are then imported
-    into the peakutils.indexes function to determine the significant peak for each array.
-    The values are stored in a list, with the first index corresponding to the top peak and the
-    second corresponding to the bottom peak.
+    """The function takes an input of the column containing the y variables in
+    the dataframe, associated with the current. The function calls the split
+    function, which splits the column into two arrays, one of the positive and
+    one of the negative values. This is because cyclic voltammetry delivers
+    negative peaks,but the peakutils function works better with positive peaks.
+    The function also runs on the middle 80% of data to eliminate unnecessary
+    noise and messy values associated with pseudo-peaks.The vectors are then
+    imported into the peakutils. Indexes function to determine the significant
+    peak for each array. The values are stored in a list, with the first index
+    corresponding to the top peak and the second corresponding to the bottom
+    peak.
     Parameters
     ______________
     y column: must be a column from a pandas dataframe
@@ -367,7 +392,7 @@ def peak_detection_fxn(data_y):
     index_list = []
 
     # split data into above and below the baseline
-    col_y1, col_y2 = split(data_y) # removed main. head.
+    col_y1, col_y2 = split(data_y)  # removed main. head.
 
     # detemine length of data and what 10% of the data is
     len_y = len(col_y1)
@@ -537,19 +562,19 @@ def data_analysis(df):
     # Peaks are here [list]
     peak_index = core.peak_detection_fxn(y)
     # Split x,y to get baselines
-    x1,x2 = core.split(x)
-    y1,y2 = core.split(y)
-    y_base1 = core.linear_background(x1,y1)
-    y_base2 = core.linear_background(x2,y2)
+    x1, x2 = core.split(x)
+    y1, y2 = core.split(y)
+    y_base1 = core.linear_background(x1, y1)
+    y_base2 = core.linear_background(x2, y2)
     # Calculations based on baseline and peak
-    values = core.peak_values(x,y)
+    values = core.peak_values(x, y)
     Et = values[0]
     Eb = values[2]
-    dE = core.del_potential(x,y)
-    half_E = min(Et,Eb) + core.half_wave_potential(x,y)
-    ia = core.peak_heights(x,y)[0]
-    ic = core.peak_heights(x,y)[1]
-    ratio_i = core.peak_ratio(x,y)
+    dE = core.del_potential(x, y)
+    half_E = min(Et, Eb) + core.half_wave_potential(x, y)
+    ia = core.peak_heights(x, y)[0]
+    ic = core.peak_heights(x, y)[1]
+    ratio_i = core.peak_ratio(x, y)
     results_dict['Peak Current Ratio'] = ratio_i
     results_dict['Ipc (A)'] = ic
     results_dict['Ipa (A)'] = ia
@@ -557,14 +582,14 @@ def data_analysis(df):
     results_dict['Epa (V)'] = Et
     results_dict['∆E (V)'] = dE
     results_dict['Redox Potential (V)'] = half_E
-    if dE>0.3:
+    if dE > 0.3:
         results_dict['Reversible'] = 'No'
     else:
         results_dict['Reversible'] = 'Yes'
 
-    if half_E>0 and  'Yes' in results_dict.values():
+    if half_E > 0 and 'Yes' in results_dict.values():
         results_dict['Type'] = 'Catholyte'
     elif 'Yes' in results_dict.values():
         results_dict['Type'] = 'Anolyte'
     return results_dict, x1, x2, y1, y2, y_base1, y_base2, peak_index
-    #return results_dict
+    # return results_dict
