@@ -2,6 +2,10 @@
 [![Build Status](https://travis-ci.org/sabiharustam/voltcycle.svg?branch=master)]
 (https://travis-ci.org/sabiharustam/voltcycle)
 
+[![Scrutinizer Code Quality]
+(https://scrutinizer-ci.com/g/sabiharustam/voltcycle/badges/quality-score.png?b=master]
+(https://scrutinizer-ci.com/g/sabiharustam/voltcylce/?branch=master)
+
 ## Package for Cyclic Voltammetry Visualization and Analysis
 This package can be used to take cyclic voltammetry data,
 clean and plot the data, and find and fit peaks to obtain peak locations.

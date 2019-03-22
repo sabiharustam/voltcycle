@@ -4,6 +4,7 @@ sudo: false
 env:
   global:
   - PIP_DEPS="pytest coveralls pytest-cov flake8"
+  - PIP_DEPS="pytest==3.6 coveralls pytest-cov flake8"  
 
 python:
 - '3.6'
@@ -16,6 +17,7 @@ install:
 
 script:
 - py.test --pyargs https://github.com/sabiharustam/voltcycle.git --cov-report term-missing --cov=https://github.com/sabiharustam/voltcycle.git
+- py.test --pyargs voltcycle --cov-report term-missing --cov=voltcylce
 #- tox
 - coverage report
 
