@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 
-def peak_detection(Dataframe_y):
+def peak_detection_fxn(Dataframe_y):
     list = [0, 1]
     return list
 
@@ -41,7 +41,7 @@ def peak_values(DataFrame_x, DataFrame_y):
        Result : numpy array of coordinates at peaks in the following order:
          potential of peak on top curve, current of peak on top curve,
          potential of peak on bottom curve, current of peak on bottom curve"""
-    index = peak_detection(DataFrame_y)
+    index = peak_detection_fxn(DataFrame_y)
     potential1, potential2 = split(DataFrame_x)
     current1, current2 = split(DataFrame_y)
     Peak_values = []
@@ -119,8 +119,8 @@ def peak_heights(DataFrame_x, DataFrame_y):
     current_min = peak_values(DataFrame_x, DataFrame_y)[3]
     x1, x2 = split(DataFrame_x)
     y1, y2 = split(DataFrame_y)
-    line_at_min = linear_background(x1, y1)[peak_detection(DataFrame_y)[1]]
-    line_at_max = linear_background(x2, y2)[peak_detection(DataFrame_y)[0]]
+    line_at_min = linear_background(x1, y1)[peak_detection_fxn(DataFrame_y)[1]]
+    line_at_max = linear_background(x2, y2)[peak_detection_fxn(DataFrame_y)[0]]
     height_of_max = current_max - line_at_max
     height_of_min = abs(current_min - line_at_min)
     return [height_of_max, height_of_min]
