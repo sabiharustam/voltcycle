@@ -6,7 +6,7 @@ the peaks. This module calls the peakutils and numpy packages along with the
 
 import peakutils
 import numpy as np
-import main
+import core
 
 
 def peak_detection_fxn(data_y):
@@ -31,7 +31,7 @@ def peak_detection_fxn(data_y):
     index_list = []
 
     # split data into above and below the baseline
-    col_y1, col_y2 = main.split(data_y)
+    col_y1, col_y2 = core.split(data_y)
 
     # detemine length of data and what 10% of the data is
     len_y = len(col_y1)
