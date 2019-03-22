@@ -2,6 +2,25 @@ import numpy as np
 import pandas as pd
 
 
+def peak_detection(Dataframe_y):
+    list = [0, 1]
+    return list
+
+
+def split(vector):
+    split = int(len(vector)/2)
+    end = int(len(vector))
+    vector1 = np.array(vector)[0:split]
+    vector2 = np.array(vector)[split:end]
+    return vector1, vector2
+
+
+def linear_background(x, y):
+    fake_line_list = [1, 2, 3, 4]
+    fake_line_array = np.array(fake_line_list)
+    return fake_line_array
+
+
 def peak_values(DataFrame_x, DataFrame_y):
     """Outputs x (potentials) and y (currents) values from data indices
         given by peak_detection function.

@@ -2,27 +2,7 @@ import numpy as np
 import pandas as pd
 
 
-from functions import calculations
-
-
-def peak_detection(Dataframe_y):
-    list = [0, 1]
-    return list
-
-
-def split(vector):
-    split = int(len(vector)/2)
-    end = int(len(vector))
-    vector1 = np.array(vector)[0:split]
-    vector2 = np.array(vector)[split:end]
-    return vector1, vector2
-
-
-def linear_background(x, y):
-    fake_line_list = [1, 2, 3, 4]
-    fake_line_array = np.array(fake_line_list)
-    return fake_line_array
-
+import calculations
 
 def test_peak_values():
     """This function tests peak_values() function."""
