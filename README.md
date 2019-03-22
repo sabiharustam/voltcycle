@@ -28,4 +28,8 @@ User can download the plots using right click save figure.
 
 See our poster for the quarter summary [here](https://github.com/sabiharustam/voltcycle/blob/master/docs/voltcycle_poster.pdf)
 
-This package is still under development. If you have any questions please email authors. 
+This package is still under development. If you have any questions please email authors.
+
+### References for images:
+https://www.fotolia.com/id/209712729
+https://www.youtube.com/watch?v=3l1hJzUqi2A 
