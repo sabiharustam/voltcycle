@@ -15,8 +15,8 @@ install:
 - travis_retry pip install -e .
 
 script:
-- py.test --pyargs voltcycle --cov-report term-missing --cov=voltcycle
-#- tox
+- python voltcycle/functions_and_tests/test_*.py
+#- py.test --pyargs voltcycle --cov-report term-missing --cov=voltcycle
 - coverage report
 
 after_success:
