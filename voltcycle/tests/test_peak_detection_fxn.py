@@ -3,7 +3,7 @@ peak_detection_fxn() function. It calls the core.py
 file which contains the function to be tested."""
 
 import numpy as np
-import core
+from voltcycle import core
 
 def test_peak_detection_fxn():
     """This function tests the peak_detection_fxn() function."""

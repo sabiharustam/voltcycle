@@ -1,7 +1,7 @@
 """This module tests the calculation functions."""
 import numpy as np
 import pandas as pd
-import calculations
+from voltcycle import calculations
 
 
 def test_peak_values():
@@ -11,8 +11,8 @@ def test_peak_values():
     potentials_d = pd.DataFrame(potentials)
     currents_d = pd.DataFrame(currents)
 
-    assert (isinstance(calculations.peak_values(potentials_d, currents_d)
-                      == np.ndarray), "output is not an array")
+    assert (isinstance(calculations.peak_values(potentials_d, currents_d),
+            np.ndarray), "output is not an array")
     assert (calculations.peak_values(potentials_d, currents_d)[0]
             == 0.498, "array value incorrect for data")
     assert (calculations.peak_values(potentials_d, currents_d)[2]
@@ -31,11 +31,11 @@ def test_del_potential():
     currents_d = pd.DataFrame(currents)
 
     assert (isinstance(calculations.del_potential(potentials_d, currents_d)
-                       == np.ndarray), "output is not an array"
+                        == np.ndarray), "output is not an array")
     assert (calculations.del_potential(potentials_d, currents_d).shape
-            == (1, 1), "output shape incorrect")
-    assert (calculations.del_potential(potentials_d, currents_d).size
-            == 1, "array size incorrect")
+                        == (1, 1), "output shape incorrect")
+    assert (calculations.del_potential(potentials_d, currents_d).size 
+                        == 1, "array size incorrect")
     (np.testing.assert_almost_equal(calculations.del_potential(potentials_d, currents_d),
 				    0.001, decimal=3), "value incorrect for data")
 
@@ -62,14 +62,12 @@ def test_peak_heights():
     potentials_d = pd.DataFrame(potentials)
     currents_d = pd.DataFrame(currents)
 
-    assert (isinstance(calculations.peak_heights(potentials_d, currents_d))
-            == list), "output is not a list")
+    assert (isinstance(calculations.peak_heights(potentials_d, currents_d),
+            list), "output is not a list")
     assert (len(calculations.peak_heights(potentials_d, currents_d))
             == 2, "output list is not the correct length")
-    (np.testing.assert_almost_equal(calculations.peak_heights(potentials_d, currents_d)[0],
-				    7.256, decimal=3), "max peak height incorrect for data")
-    (np.testing.assert_almost_equal(calculations.peak_heights(potentials_d, currents_d)[1],
-                                    4.998, decimal=3), "min peak height incorrect for data")
+    np.testing.assert_almost_equal(calculations.peak_heights(potentials_d, currents_d)[0],              7.256, decimal=3, err_msg="max peak height incorrect for data")
+    np.testing.assert_almost_equal(calculations.peak_heights(potentials_d, currents_d)[1],              4.998, decimal=3, err_msg="min peak height incorrect for data")
 
 
 def test_peak_ratio():
@@ -83,5 +81,5 @@ def test_peak_ratio():
             == np.ndarray, "output is not an array")
     assert (len(calculations.peak_ratio(potentials_d, currents_d))
             == 1, "output list is not the correct length")
-    (np.testing.assert_almost_equal(calculations.peak_ratio(potentials_d, currents_d),
-                                    1.451, decimal=3), "max peak height incorrect for data")
+    np.testing.assert_almost_equal(calculations.peak_ratio(potentials_d, currents_d),
+            1.451, decimal=3, err_msg="max peak height incorrect for data")

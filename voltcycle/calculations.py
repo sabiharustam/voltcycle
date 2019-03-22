@@ -1,7 +1,7 @@
 """This module consists of all the functions used
 to calculate the pertinent values. """
 import numpy as np
-import core
+from . import core
 
 def peak_values(dataframe_x, dataframe_y):
     """Outputs x (potentials) and y (currents) values from data indices

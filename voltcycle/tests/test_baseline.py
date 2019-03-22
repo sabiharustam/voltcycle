@@ -1,8 +1,8 @@
 """This module tests the baseline function."""
 # import functions and modules
 import numpy as np
-import file_read
-import baseline
+from voltcycle import file_read
+from voltcycle import baseline
 
 #Test functions:
 def test_split():
