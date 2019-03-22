@@ -4,7 +4,9 @@
 (https://travis-ci.org/sabiharustam/voltcycle)
 
 [![Scrutinizer Code Quality]
+
 (https://scrutinizer-ci.com/g/sabiharustam/voltcycle/badges/quality-score.png?b=master]
+
 (https://scrutinizer-ci.com/g/sabiharustam/voltcylce/?branch=master)
 
 ## Package for Cyclic Voltammetry Visualization and Analysis
@@ -58,7 +60,7 @@ setup.py(if we have final installable)
 
 
 ## User Interface
-![dash_interface](https://github.com/sabiharustam/voltcycle/blob/master/images/dash_interface.png)
+![dash_interface](https://github.com/sabiharustam/voltcycle/blob/master/images/dash_interface_image.PNG)
 
 ## Howto
 The example usage of the functions are shown in example folder ipython notebook. User can use functions in ipython notebook 
@@ -74,10 +76,10 @@ User can download the plots using right click save figure.
 ![workflow](https://github.com/sabiharustam/voltcycle/blob/master/images/workflow.png)
 
 See our poster for the quarter summary 
-[here](https://github.com/sabiharustam/voltcycle/blob/master/docs/voltcycle_poster.pdf)
+[here](https://github.com/sabiharustam/voltcycle/blob/master/images/Final%20Poster.pdf)
 
 This package is still under development. If you have any questions please email authors. 
 
 ### References for images:
-https://www.fotolia.com/id/209712729
-https://www.youtube.com/watch?v=3l1hJzUqi2A 
+- https://www.fotolia.com/id/209712729
+- https://www.youtube.com/watch?v=3l1hJzUqi2A 
