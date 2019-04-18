@@ -1,5 +1,3 @@
-"""This module consists of all the functions utilized
-for the Dash user interface."""
 
 import dash_resumable_upload
 import dash
@@ -29,7 +27,7 @@ if path.exists(directory):
     system("rm -r uploads")
 #    remove(directory)
 else:
-    pass
+    pass    
 
 app = dash.Dash('')
 
@@ -106,8 +104,8 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
             'height': '80%',
             }
     ),
-
-
+       
+    
     html.Div([
         html.Br(),
         html.H2(
@@ -148,48 +146,45 @@ def parse_contents(value):
         return df
 
 
-def data_analysis(data):
-    """This function returns a dictionary consisting of
-    the relevant values. This can be seen in the user
-    interface (Dash) as well."""
+def data_analysis(df):
     results_dict = {}
 
     # df = main.data_frame(dict_1,1)
-    x_val = data['Potential']
-    y_val = data['Current']
+    x = df['Potential']
+    y = df['Current']
     # Peaks are here [list]
-    peak_index = peak_detection_fxn(y_val)
+    peak_index = core.peak_detection_fxn(y)
     # Split x,y to get baselines
-    col_x1, col_x2 = split(x_val)
-    col_y1, col_y2 = split(y_val)
-    y_base1 = linear_background(col_x1, col_y1)
-    y_base2 = linear_background(col_x2, col_y2)
+    x1,x2 = core.split(x)
+    y1,y2 = core.split(y)
+    y_base1 = core.linear_background(x1,y1)
+    y_base2 = core.linear_background(x2,y2)
     # Calculations based on baseline and peak
-    values = peak_values(x_val, y_val)
-    esub_t = values[0]
-    esub_b = values[2]
-    dof_e = del_potential(x_val, y_val)
-    half_e = min(esub_t, esub_b) + half_wave_potential(x_val, y_val)
-    ipa = peak_heights(x_val, y_val)[0]
-    ipc = peak_heights(x_val, y_val)[1]
-    ratio_i = peak_ratio(x_val, y_val)
+    values = core.peak_values(x,y)
+    Et = values[0]
+    Eb = values[2]
+    dE = core.del_potential(x,y)
+    half_E = min(Et,Eb) + core.half_wave_potential(x,y)
+    ia = core.peak_heights(x,y)[0]
+    ic = core.peak_heights(x,y)[1]
+    ratio_i = core.peak_ratio(x,y)
     results_dict['Peak Current Ratio'] = ratio_i
-    results_dict['Ipc (A)'] = ipc
-    results_dict['Ipa (A)'] = ipa
-    results_dict['Epc (V)'] = esub_b
-    results_dict['Epa (V)'] = esub_t
-    results_dict['∆E (V)'] = dof_e
-    results_dict['Redox Potential (V)'] = half_e
-    if dof_e > 0.3:
+    results_dict['Ipc (A)'] = ic
+    results_dict['Ipa (A)'] = ia
+    results_dict['Epc (V)'] = Eb
+    results_dict['Epa (V)'] = Et
+    results_dict['∆E (V)'] = dE
+    results_dict['Redox Potential (V)'] = half_E
+    if dE>0.3:
         results_dict['Reversible'] = 'No'
     else:
         results_dict['Reversible'] = 'Yes'
-
-    if half_e > 0 and  'Yes' in results_dict.values():
+    
+    if half_E>0 and  'Yes' in results_dict.values():
         results_dict['Type'] = 'Catholyte'
     elif 'Yes' in results_dict.values():
         results_dict['Type'] = 'Anolyte'
-    return results_dict, col_x1, col_x2, col_y1, col_y2, y_base1, y_base2, peak_index
+    return results_dict, x1, x2, y1, y2, y_base1, y_base2, peak_index
     #return results_dict
 
 
@@ -213,7 +208,7 @@ def dropdown_files(fileNames):
     Output('datatable_initial', 'rows'),
     [Input('files_dropdown', 'value')])
 def update_table1(value):
-
+    
     df = parse_contents(value)
     #print(df.head())
     #final_dict = data_analysis(df)
@@ -228,7 +223,7 @@ def update_table1(value):
 def update_figure(value):
     df = parse_contents(value)
     final_dict, x_1, x_2, y_1, y_2, ybase_1, ybase_2, peak_i = data_analysis(df)
-
+    
     trace1 = go.Scatter(
             x = df['Potential'],
             y = df['Current'],
@@ -274,7 +269,7 @@ def update_figure(value):
                 'color' : '#000080'
             })
     data = [trace1, trace2, trace3, trace4, trace5]
-
+ 
     return {
         'data': data,
         #'layout' : {'Dash'}
