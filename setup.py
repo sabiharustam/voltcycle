@@ -35,7 +35,7 @@ setup(
 
     install_requires=[
         'pandas==0.23.4',
-        'numpy==1.15.4',
+        'numpy==1.22.0',
         'PeakUtils==1.3.2',
         'plotly==3.6.1',
         'dash==0.39.0',
