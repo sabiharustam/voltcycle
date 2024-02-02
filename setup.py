@@ -38,7 +38,7 @@ setup(
         'numpy==1.15.4',
         'PeakUtils==1.3.2',
         'plotly==3.6.1',
-        'dash==0.39.0',
+        'dash==2.15.0',
         'dash-core-components==0.44.0',
         'dash-html-components==0.14.0',
         'dash-renderer==0.20.0',
