@@ -40,7 +40,7 @@ setup(
         'plotly==3.6.1',
         'dash==0.39.0',
         'dash-core-components==0.44.0',
-        'dash-html-components==0.14.0',
+        'dash-html-components==2.0.0',
         'dash-renderer==0.20.0',
         'dash-resumable-upload==0.0.3',
         'dash-table==3.6.0',
